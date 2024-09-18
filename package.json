@@ -1,0 +1,17 @@
+{
+  "name": "gothenburg-distress-index",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Henrik Forsberg <henrik.forsberg1990@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.0",
+    "simple-statistics": "^7.8.5"
+  },
+  "scripts": {
+    "dev": "node dev-server.js",
+    "pipeline:run": "node pipeline/index.mjs",
+    "start": "yarn pipeline:run && yarn dev"
+  }
+}

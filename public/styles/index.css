@@ -1,0 +1,131 @@
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+p {
+  text-align: left;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.9;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+table {
+  text-align: left;
+  margin: auto;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  font-weight: 300;
+  font-style: normal;
+  font-size: small;
+}
+
+td {
+  text-align: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 15px;
+}
+
+input {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}
+
+.formItemSelect {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.footerImageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px;
+}
+
+.footerTextContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.button {
+  border-radius: 8px;
+  border-width: 0;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+select {
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+path {
+  fill: lightgray;
+  stroke: white;
+}
+
+.foreground {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5px;
+}
+
+.mapContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tooltip {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    width: 90%;
+  }
+}

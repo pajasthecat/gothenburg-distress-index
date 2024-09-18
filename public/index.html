@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IESG - Hur mår ditt område?</title>
+    <link rel="icon" type="image/png" href="images/bar-graph.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/index.css" />
+  </head>
+  <body>
+    <h1>Index för Ekonomisk Sårbarhet i Göteborg (IESG)</h1>
+    <p>
+      Index för Ekonomisk Sårbarhet i Göteborg (IESG) för Göteborgs
+      primärområden är ett mått som speglar ekonomisk utsatthet i olika delar av
+      kommunen. Indexet är baserat på tre centrala faktorer: inkomstnivåer,
+      arbetslöshet och gymnasiebehörighet.
+    </p>
+    <p>
+      Områden med hög arbetslöshet, lägre inkomster och en mindre andel ungdomar
+      med gymnasiebehörighet har högre indexvärden, vilket indikerar större
+      ekonomisk utsatthet. Datan har samlats in från Göteborgs stads
+      statistikdatabas, vilket ger en pålitlig grund för att analysera och
+      jämföra ekonomiska förhållanden mellan olika primärområden.
+    </p>
+
+    <h2>Karta över Göteborgs primärområden</h2>
+
+    <div class="mapContainer">
+      <div>
+        <svg></svg>
+        <div id="tooltip" class="tooltip"></div>
+      </div>
+    </div>
+
+    <h2>Mest välmående områden</h2>
+    <table id="prosperousAreas">
+      <thead>
+        <tr>
+          <th>Placering</th>
+          <th>Område</th>
+          <th>IESG</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>Mest utsatta områden</h2>
+    <table id="distressedAreas">
+      <thead>
+        <tr>
+          <th>Placering</th>
+          <th>Område</th>
+          <th>IESG</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>Alla områden</h2>
+    <br />
+    <div style="height: 300px; overflow: auto">
+      <table id="allPrimaryAreas">
+        <thead>
+          <tr>
+            <th>Område</th>
+            <th>Status</th>
+            <th>IESG</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <footer>
+      <div class="footerContainer">
+        <div class="footerImageContainer">
+          <a href="mailto: henrik.forsberg1990@gmail.com">
+            <img src="images\email.png" alt="email icon"
+          /></a>
+          <a
+            href="https://github.com/pajasthecat/real-income-presentor"
+            ,
+            target="_blank"
+          >
+            <img src="images\github.png" alt="github icon" />
+          </a>
+        </div>
+        <div class="footerTextContainer">
+          <div></div>
+          <p>No tracking. No cookies. No visit logs.</p>
+          <div></div>
+        </div>
+
+        <div class="footerTextContainer">
+          <a
+            href="https://www.flaticon.com/free-icons/bar-chart"
+            title="bar chart icons"
+            target="_blank"
+            >Bar chart icons created by Pixel perfect - Flaticon</a
+          >
+        </div>
+
+        <div class="footerTextContainer">
+          <div></div>
+          <p>©2024 Henrik Forsberg.</p>
+          <div></div>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="./scripts/index.mjs"></script>
+  </body>
+</html>
