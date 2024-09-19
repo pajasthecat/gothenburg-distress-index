@@ -26,7 +26,7 @@ Since the data has different ranges I have normalized them, with a max-min norma
 
 ### 4. Composite indicator
 
-$ESGI = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{total}}$
+$IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{total}}$
 
 ## Data pipeline
 
