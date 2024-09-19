@@ -22,11 +22,11 @@ Since the data has different ranges I have normalized them, with a max-min norma
 
 ### 3. Aissigning weights
 
-- $w_i + w_u + w_h = w_{total}$
+- $w_i + w_u + w_h = w_{sum}$
 
 ### 4. Composite indicator
 
-$IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{total}}$
+$IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{sum}}$
 
 ## Data pipeline
 
