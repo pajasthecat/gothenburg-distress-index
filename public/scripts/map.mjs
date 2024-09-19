@@ -25,7 +25,7 @@ const drawMap = (mapEntries, err) => {
     .on("mouseover", (d) => {
       const areaName = d.properties["Name"];
       const index = d.properties["Index"];
-      const tooltipText = `${areaName} - ESGI: ${index}`;
+      const tooltipText = `${areaName}: ${index}`;
 
       d3.select("#tooltip").style("opacity", 1).text(tooltipText);
     })

@@ -129,13 +129,18 @@ const addToGeoData = (indexData, geoData) => {
 
     const index = getIndexValue(match.composite_index);
 
+    const name = match.area
+      .split(" ")
+      .splice(1, 2)
+      .toString()
+      .replace(",", " ");
+
     return {
       ...feat,
       properties: {
-        // ...feat.properties,
         Color: match.index_classification.color,
         Index: index,
-        Name: match.area,
+        Name: name,
       },
     };
   });
