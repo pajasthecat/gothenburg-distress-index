@@ -5,7 +5,11 @@ import {
   getUsse,
 } from "../src/client.mjs";
 
+import { readFileSync } from "fs";
+
 export const collectData = async () => {
+  const geoData = JSON.parse(readFileSync("data/data.geojson"));
+
   const unemployment = await getUnemploymentFigures();
   const populationData = await getPopulation();
   const medianIncomeData = await getMedianIncome();
@@ -36,5 +40,6 @@ export const collectData = async () => {
     gothenburg: {
       median_income: medianIncomeData.slice(-1)[0].medianIncome,
     },
+    geoData,
   };
 };

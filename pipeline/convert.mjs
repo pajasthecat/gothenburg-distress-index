@@ -1,18 +1,24 @@
 import { quantileRank } from "simple-statistics";
 
+import { getIndexValue } from "../src/helpers.mjs";
+
 const scales = {
   median_under_city_average: 1,
   non_eligable_upper_secondary_school_percent: 1,
   unemployed_percent: 1,
 };
 
-export const convert = ({ primary_areas, gothenburg }) => {
-  return primary_areas
+export const convert = ({ primary_areas, gothenburg, geoData }) => {
+  const indexData = primary_areas
     .map((p) => calculateIndexMembers(p, gothenburg))
     .map(normalize)
     .map(applyWeights)
     .map(calculateIndex)
     .map(calculateQuartile);
+
+  const updatedGeoData = addToGeoData(indexData, geoData);
+
+  return { geoData: updatedGeoData, indexData };
 };
 
 const calculateIndexMembers = (primaryArea, gothenburg) => {
@@ -111,6 +117,30 @@ const getIndexClassification = (quartile) => {
   if (quartile <= 0.5) return { status: "Stabilt", color: "#d8c500" };
   if (quartile <= 0.75) return { status: "Sårbart", color: "#ec7a30" };
   else return { status: "Utsatt", color: "#d82c09" };
+};
+
+const addToGeoData = (indexData, geoData) => {
+  const features = geoData.features.map((feat) => {
+    const match = indexData.find((primaryArea) => {
+      const areaCode = primaryArea.area.split(" ")[0];
+
+      return areaCode === feat.properties["PrimaryAreaCode"];
+    });
+
+    const index = getIndexValue(match.composite_index);
+
+    return {
+      ...feat,
+      properties: {
+        // ...feat.properties,
+        Color: match.index_classification.color,
+        Index: index,
+        Name: match.area,
+      },
+    };
+  });
+
+  return { ...geoData, features };
 };
 
 const getNonElibiablePercent = (p) => {

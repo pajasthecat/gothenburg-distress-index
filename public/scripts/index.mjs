@@ -68,21 +68,3 @@ setUpAllPrimaryAreas();
 setUpProsperusAreas();
 
 setUpDistressedAreas();
-
-document.getElementById("streetAddress").addEventListener("input", (event) => {
-  var input = event.target.value;
-
-  if (input.length < 3) return;
-  const result = document.getElementById("result");
-  const reg = new RegExp(input);
-  const filteredAreas = areas.filter((area) => area.address.match(reg));
-  let list = "";
-
-  console.log({ filteredAreas });
-
-  filteredAreas.forEach((address) => {
-    list += "<li>" + address.address + "</li>";
-  });
-
-  result.innerHTML = "<ul>" + list + "</ul>";
-});
