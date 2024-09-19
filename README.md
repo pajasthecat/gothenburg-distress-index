@@ -49,7 +49,7 @@ To see details what is being fetched, see the client in `src/client.mjs `.
 
 ## Map
 
-The geo data has been gathered by using the .sh format published bt [Göteborgs Stadsbyggnadskontor](https://goteborg.se/wps/portal/enhetssida/statistik-och-analys/geografi/gisskikt-for-stadens-omradesindelning) and then converted it to geojson trough [mapshaper.com](https://mapshaper.org/).
+The geo data has been gathered by using the .sh format published by [Göteborgs Stadsbyggnadskontor](https://goteborg.se/wps/portal/enhetssida/statistik-och-analys/geografi/gisskikt-for-stadens-omradesindelning) and then converted to geojson with the help of [mapshaper.com](https://mapshaper.org/).
 
 ### Help creating d3 maps
 
