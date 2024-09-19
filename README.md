@@ -1,16 +1,44 @@
 # Index för Ekonomisk Sårbarhet i Göteborg (IESG)
 
+## Indicator
+
+### 1. Defining parameters
+
+The composite indicator consist of the following indicators:
+
+- Let $I$ be the median income indicator.
+- Let $U$ be the unemployment indicator.
+- Let $E$ be the upper secondary education ineligibility indicator.
+
+### 2. Data normalization
+
+Since the data has different ranges I have normalized them, with a max-min normalizer (feature scaling) which performs a linear transformation on the original data.
+
+- $I´ = \dfrac{I - I*{min}}{I*{max} - I\_{min}} $
+
+- $U´ = \dfrac{U - U*{min}}{U*{max} - U\_{min}} $
+
+- $E´ = \dfrac{E - E*{min}}{E*{max} - E\_{min}} $
+
+### 3. Aissigning weights
+
+- $w_i + w_u + w_h = w_{total}$
+
+### 4. Composite indicator
+
+$ESGI = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{total}}$
+
 ## Data pipeline
 
-I use a data pipeline to feth data (collect.mjs) and then convert it and do the index calculations (convert.mjs) adn then sva eit in the public folder in `public/data`.
+I use a data pipeline to fetch data (collect.mjs) and then convert it and do the index calculations (convert.mjs) adn then sva eit in the public folder in `public/data`.
 
 ### Data sources
 
-To see details what is beeing fethced, see the client in `src/client.mjs `.
+To see details what is being fetched, see the client in `src/client.mjs `.
 
 | Data                                  | Source                          | Link                                                                                                                                                                              |
 | ------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Median                                | Statistikdatabas Göteborgs Stad | https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Inkomst och utbildning/Inkomster/Förvärvsinkomster etc/23_InkomsterUtbildning_PRI.px |
+| Median income                         | Statistikdatabas Göteborgs Stad | https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Inkomst och utbildning/Inkomster/Förvärvsinkomster etc/23_InkomsterUtbildning_PRI.px |
 | Unemployment                          | Statistikdatabas Göteborgs Stad | https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Arbetsmarknad/Arbetslöshet/10_AntalArblos_PRI.px                                     |
 | Upper secondary education eligibility | Statistikdatabas Göteborgs Stad | https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Inkomst och utbildning/Utbildning/30_Gymnbehorig_PRI.px                              |
 | Population figures                    | Statistikdatabas Göteborgs Stad | https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Befolkning/Folkmängd/Folkmängd helår/10_FolkmHelar_PRI.px                            |
