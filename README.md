@@ -34,7 +34,7 @@ $IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{sum}}$
 
 ## Data pipeline
 
-I use a data pipeline to fetch data (collect.mjs) and then convert it and do the index calculations (convert.mjs) adn then sva eit in the public folder in `public/data`.
+I use a data pipeline to fetch data (collect.mjs) and then convert it and do the index calculations (convert.mjs) and then save it in `public/data`.
 
 ### Data sources
 
