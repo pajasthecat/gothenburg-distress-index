@@ -33,7 +33,8 @@ th {
   font-size: small;
 }
 
-td {
+td,
+th {
   text-align: center;
 }
 
@@ -122,6 +123,24 @@ path {
   text-align: center;
   font-size: 12px;
   opacity: 0;
+}
+
+.headerSortDown:after,
+.headerSortUp:after {
+  content: " ";
+  position: relative;
+  left: 10px;
+  border: 7px solid transparent;
+}
+
+.headerSortDown:after {
+  top: 10px;
+  border-top-color: black;
+}
+
+.headerSortUp:after {
+  bottom: 10px;
+  border-bottom-color: black;
 }
 
 @media screen and (max-width: 800px) {

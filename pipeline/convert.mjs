@@ -1,6 +1,6 @@
 import { quantileRank } from "simple-statistics";
 
-import { getIndexValue } from "../src/helpers.mjs";
+import { round, getIndexValue } from "../src/helpers.mjs";
 
 const scales = {
   median_under_city_average: 1,
@@ -14,7 +14,8 @@ export const convert = ({ primary_areas, gothenburg, geoData }) => {
     .map(normalize)
     .map(applyWeights)
     .map(calculateIndex)
-    .map(calculateQuartile);
+    .map(calculateQuartile)
+    .map(pickDataToExpose);
 
   const updatedGeoData = addToGeoData(indexData, geoData);
 
@@ -95,21 +96,36 @@ const calculateIndex = (primaryArea) => {
       non_eligable_upper_secondary_school_percent_normalized_w) /
     weightSum;
 
-  return { ...primaryArea, composite_index };
+  const composite_index_rounded = getIndexValue(composite_index);
+
+  return {
+    ...primaryArea,
+    index: { composite_index, composite_index_rounded },
+  };
 };
 
 const calculateQuartile = (primaryArea, _, array) => {
-  const allIndexEntries = array.map((_) => _.composite_index);
+  const allIndexEntries = array.map((_) => _.index.composite_index_rounded);
 
   const index_quartile = quantileRank(
     allIndexEntries,
-    primaryArea.composite_index
+    primaryArea.index.composite_index_rounded
   );
 
   const index_classification = getIndexClassification(index_quartile);
 
   return { ...primaryArea, index_quartile, index_classification };
 };
+
+const pickDataToExpose = ({
+  area,
+  index: { composite_index_rounded },
+  index_classification,
+}) => ({
+  area,
+  index: composite_index_rounded,
+  index_classification,
+});
 
 const getIndexClassification = (quartile) => {
   if (quartile <= 0.1) return { status: "Välbärgat", color: "#00783c" };
@@ -127,7 +143,7 @@ const addToGeoData = (indexData, geoData) => {
       return areaCode === feat.properties["PrimaryAreaCode"];
     });
 
-    const index = getIndexValue(match.composite_index);
+    const index = match.index;
 
     const name = match.area
       .split(" ")
