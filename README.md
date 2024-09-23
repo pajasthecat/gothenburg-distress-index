@@ -18,15 +18,15 @@ The composite indicator consist of the following indicators:
 
 Since the data has different ranges I have normalized them, with a max-min normalizer (feature scaling) which performs a linear transformation on the original data.
 
-- $I´ = \dfrac{I - I*{min}}{I*{max} - I\_{min}} $
+- $I´ = \dfrac{I - I_{min}}{I_{max} - I\_{min}} $
 
-- $U´ = \dfrac{U - U*{min}}{U*{max} - U\_{min}} $
+- $U´ = \dfrac{U - U_{min}}{U_{max} - U\_{min}} $
 
-- $E´ = \dfrac{E - E*{min}}{E*{max} - E\_{min}} $
+- $E´ = \dfrac{E - E_{min}}{E_{max} - E\_{min}} $
 
 ### 3. Aissigning weights
 
-- $w_i + w_u + w_h = w_{sum}$
+- $w_I + w_U + w_E = w_{sum}$
 
 ### 4. Composite indicator
 
