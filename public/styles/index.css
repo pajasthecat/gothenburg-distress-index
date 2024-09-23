@@ -22,6 +22,7 @@ table {
   text-align: left;
   margin: auto;
   width: 100%;
+  table-layout: fixed;
 }
 
 td,
@@ -157,5 +158,9 @@ path {
 @media screen and (max-width: 800px) {
   body {
     width: 90%;
+  }
+  td,
+  th {
+    font-size: x-small;
   }
 }

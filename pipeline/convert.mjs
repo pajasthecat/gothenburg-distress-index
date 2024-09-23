@@ -128,7 +128,7 @@ const pickDataToExpose = ({
 });
 
 const getIndexClassification = (quartile) => {
-  if (quartile <= 0.1) return { status: "Välbärgat", color: "#00783c" };
+  if (quartile <= 0.1) return { status: "Blomstrande", color: "#00783c" };
   if (quartile <= 0.25) return { status: "Välmående", color: "#a9ad39" };
   if (quartile <= 0.5) return { status: "Stabilt", color: "#d8c500" };
   if (quartile <= 0.75) return { status: "Sårbart", color: "#ec7a30" };
