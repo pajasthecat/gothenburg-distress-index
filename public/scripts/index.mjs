@@ -74,6 +74,8 @@ const resetAllPrimaryAreas = () => {
    `;
     allPrimaryAreas.innerHTML += template;
   });
+
+  setSortingEventListeners();
 };
 
 const handleSearchPrimaryAreas = (searchText) => {
@@ -114,6 +116,8 @@ const handleSearchPrimaryAreas = (searchText) => {
 
     allPrimaryAreas.innerHTML += template;
   });
+
+  setSortingEventListeners();
 };
 
 const sortTable = (index, comparer, event) => {
@@ -171,26 +175,33 @@ const sortTable = (index, comparer, event) => {
   }
 };
 
+const setSortingEventListeners = () => {
+  document
+    .getElementById("table-header-status")
+    .addEventListener("click", () => sortTable(1, "string"));
+
+  document
+    .getElementById("table-header-index")
+    .addEventListener("click", () => sortTable(2, "number"));
+
+  document
+    .getElementById("table-header-area")
+    .addEventListener("click", () => sortTable(0, "area"));
+};
+
+const setSearchEventListeners = () =>
+  document
+    .getElementById("searchText")
+    .addEventListener("input", (e) =>
+      e?.target?.value === ""
+        ? resetAllPrimaryAreas()
+        : handleSearchPrimaryAreas(e?.target?.value)
+    );
+
 createPrimaryAreaMap();
 
 setUpAllPrimaryAreas();
 
-document
-  .getElementById("table-header-status")
-  .addEventListener("click", () => sortTable(1, "string"));
+setSortingEventListeners();
 
-document
-  .getElementById("table-header-index")
-  .addEventListener("click", () => sortTable(2, "number"));
-
-document
-  .getElementById("table-header-area")
-  .addEventListener("click", () => sortTable(0, "area"));
-
-document
-  .getElementById("searchText")
-  .addEventListener("input", (e) =>
-    e?.target?.value === ""
-      ? resetAllPrimaryAreas()
-      : handleSearchPrimaryAreas(e?.target?.value)
-  );
+setSearchEventListeners();
