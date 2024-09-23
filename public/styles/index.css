@@ -31,11 +31,13 @@ th {
   font-weight: 300;
   font-style: normal;
   font-size: small;
+  text-align: center;
 }
 
-td,
 th {
-  text-align: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 .inputContainer {
