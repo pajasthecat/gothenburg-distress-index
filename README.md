@@ -10,7 +10,7 @@ You can find the index presented [here](https://iesg.pages.dev/).
 
 The composite indicator consist of the following indicators:
 
-- Let $I$ be the median income indicator.
+- Let $I$ be the income quintile of the median income compared to the other areas.
 - Let $U$ be the unemployment indicator.
 - Let $E$ be the upper secondary education ineligibility indicator.
 
@@ -18,11 +18,11 @@ The composite indicator consist of the following indicators:
 
 Since the data has different ranges I have normalized them, with a max-min normalizer (feature scaling) which performs a linear transformation on the original data.
 
-- $I´ = \dfrac{I - I_{min}}{I_{max} - I\_{min}} $
+- $I´ = \dfrac{I - I*{min}}{I*{max} - I\_{min}} $
 
-- $U´ = \dfrac{U - U_{min}}{U_{max} - U\_{min}} $
+- $U´ = \dfrac{U - U*{min}}{U*{max} - U\_{min}} $
 
-- $E´ = \dfrac{E - E_{min}}{E_{max} - E\_{min}} $
+- $E´ = \dfrac{E - E*{min}}{E*{max} - E\_{min}} $
 
 ### 3. Aissigning weights
 
@@ -30,7 +30,7 @@ Since the data has different ranges I have normalized them, with a max-min norma
 
 ### 4. Composite indicator
 
-$IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{sum}}$
+$IESG = \dfrac{ (1 -w_I * I´) + w_U * U´ + w_E * E´}{w_{sum}}$
 
 ## Data pipeline
 
