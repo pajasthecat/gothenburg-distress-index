@@ -3,10 +3,10 @@ import { quantileRank } from "simple-statistics";
 import { round, getIndexValue } from "../src/helpers.mjs";
 
 const scales = {
-  median_under_city_average: 1,
-  non_eligable_upper_secondary_school_percent: 1,
-  unemployed_percent: 1,
-  population_on_government_assistance: 1,
+  median_under_city_average: 0.25,
+  non_eligable_upper_secondary_school_percent: 0.25,
+  unemployed_percent: 0.25,
+  population_on_government_assistance: 0.25,
 };
 
 export const convert = ({ primary_areas, gothenburg, geoData }) => {
@@ -29,10 +29,13 @@ const calculateIndexMembers = (primaryArea, gothenburg, primaryAreas) => {
   const median_under_city_average =
     primaryArea.median_income >= gothenburg.median_income ? 0 : 1;
 
-  const quartile_income = quantileRank(
-    primaryAreas.map((p) => p.median_income),
-    primaryArea.median_income
-  );
+  const quartile_income =
+    1 -
+    quantileRank(
+      primaryAreas.map((p) => p.median_income),
+      primaryArea.median_income
+    );
+
   const non_eligable_upper_secondary_school_percent =
     getNonElibiablePercent(primaryArea);
 
@@ -115,18 +118,11 @@ const calculateIndex = (primaryArea) => {
     population_on_government_assistance_normalized_w,
   } = primaryArea;
 
-  const weightSum = Object.entries(scales)
-    .map(([_, value]) => value)
-    .flat()
-    .reduce((agg, current) => (agg += current), 0);
-
   const composite_index =
-    (1 -
-      quartile_income_normalized_w +
-      unemployed_percent_normalized_w +
-      non_eligable_upper_secondary_school_percent_normalized_w +
-      population_on_government_assistance_normalized_w) /
-    weightSum;
+    quartile_income_normalized_w +
+    unemployed_percent_normalized_w +
+    non_eligable_upper_secondary_school_percent_normalized_w +
+    population_on_government_assistance_normalized_w;
 
   const composite_index_rounded = getIndexValue(composite_index);
 
