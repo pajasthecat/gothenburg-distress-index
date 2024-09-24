@@ -32,7 +32,7 @@ Since the data has different ranges I have normalized them, with a max-min norma
 
 - $WR´ = \dfrac{WR - WR_{min}}{WR_{max} - WR_{min}} $
 
-### 3. Aissigning weights
+### 3. Assigning weights
 
 - $w_I + w_U + w_E + w_{W R}= 1$
 
