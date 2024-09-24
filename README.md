@@ -10,27 +10,35 @@ You can find the index presented [here](https://iesg.pages.dev/).
 
 The composite indicator consist of the following indicators:
 
-- Let $I$ be the median income indicator.
-- Let $U$ be the unemployment indicator.
-- Let $E$ be the upper secondary education ineligibility indicator.
+- Let $I$ be the income quintile of the median income compared to the other areas.
+- Let $U$ be the unemployment percentage in the area.
+- Let $E$ be the percentage of non-eligible to upper secondary education in the area.
+- Let $WR$ be the percentage of welfare recipients in the area.
 
 ### 2. Data normalization
 
+For $I$ I will invert the value. I.E if the quintile is 0.9, the inverted value will be 0.1. This is because a higher value indicates less stress. To align it with the scale of the other values we have to invert it.
+
+- $I^{-1} = 1 - I$
+
 Since the data has different ranges I have normalized them, with a max-min normalizer (feature scaling) which performs a linear transformation on the original data.
 
-- $I´ = \dfrac{I - I_{min}}{I_{max} - I\_{min}} $
 
-- $U´ = \dfrac{U - U_{min}}{U_{max} - U\_{min}} $
+- $I^{-1}´ = \dfrac{I^{-1} - I^{-1}_{min}}{I^{-1}_{max} - I^{-1}_{min}} $
 
-- $E´ = \dfrac{E - E_{min}}{E_{max} - E\_{min}} $
+- $U´ = \dfrac{U - U_{min}}{U_{max} - U_{min}} $
 
-### 3. Aissigning weights
+- $E´ = \dfrac{E - E_{min}}{E_{max} - E_{min}} $
 
-- $w_I + w_U + w_E = w_{sum}$
+- $WR´ = \dfrac{WR - WR_{min}}{WR_{max} - WR_{min}} $
+
+### 3. Assigning weights
+
+- $w_I + w_U + w_E + w_{W R}= 1$
 
 ### 4. Composite indicator
 
-$IESG = \dfrac{ w_I * I´ + w_U * U´ + w_E * E´}{w_{sum}}$
+$IESG =  w_I * I^{-1} ´ + w_U * U´ + w_E * E + w_{WR} * WR´$
 
 ## Data pipeline
 

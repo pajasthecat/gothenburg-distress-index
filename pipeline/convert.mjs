@@ -3,14 +3,17 @@ import { quantileRank } from "simple-statistics";
 import { round, getIndexValue } from "../src/helpers.mjs";
 
 const scales = {
-  median_under_city_average: 1,
-  non_eligable_upper_secondary_school_percent: 1,
-  unemployed_percent: 1,
+  median_under_city_average: 0.25,
+  non_eligable_upper_secondary_school_percent: 0.25,
+  unemployed_percent: 0.25,
+  population_on_government_assistance: 0.25,
 };
 
 export const convert = ({ primary_areas, gothenburg, geoData }) => {
   const indexData = primary_areas
-    .map((p) => calculateIndexMembers(p, gothenburg))
+    .map((primaryArea, _, array) =>
+      calculateIndexMembers(primaryArea, gothenburg, array)
+    )
     .map(normalize)
     .map(applyWeights)
     .map(calculateIndex)
@@ -22,18 +25,28 @@ export const convert = ({ primary_areas, gothenburg, geoData }) => {
   return { geoData: updatedGeoData, indexData };
 };
 
-const calculateIndexMembers = (primaryArea, gothenburg) => {
+const calculateIndexMembers = (primaryArea, gothenburg, primaryAreas) => {
   const median_under_city_average =
     primaryArea.median_income >= gothenburg.median_income ? 0 : 1;
+
+  const quartile_income =
+    1 -
+    quantileRank(
+      primaryAreas.map((p) => p.median_income),
+      primaryArea.median_income
+    );
 
   const non_eligable_upper_secondary_school_percent =
     getNonElibiablePercent(primaryArea);
 
   return {
     ...primaryArea,
+    quartile_income,
     median_under_city_average,
     non_eligable_upper_secondary_school_percent,
     unemployed_percent: primaryArea.unemployed.percent,
+    population_on_government_assistance:
+      primaryArea.governmentAssistance.percent,
   };
 };
 
@@ -41,6 +54,11 @@ const normalize = (primaryArea, _, array) => {
   const median_under_city_average_normalized = maxMinScalar(
     primaryArea.median_under_city_average,
     array.map((a) => a.median_under_city_average)
+  );
+
+  const quartile_income_normalized = maxMinScalar(
+    primaryArea.quartile_income,
+    array.map((a) => a.quartile_income)
   );
 
   const non_eligable_upper_secondary_school_percent_normalized = maxMinScalar(
@@ -53,17 +71,27 @@ const normalize = (primaryArea, _, array) => {
     array.map((a) => a.unemployed_percent)
   );
 
+  const population_on_government_assistance_normalized = maxMinScalar(
+    primaryArea.population_on_government_assistance,
+    array.map((a) => a.population_on_government_assistance)
+  );
+
   return {
     ...primaryArea,
     median_under_city_average_normalized,
+    quartile_income_normalized,
     non_eligable_upper_secondary_school_percent_normalized,
     unemployed_percent_normalized,
+    population_on_government_assistance_normalized,
   };
 };
 
 const applyWeights = (primaryArea) => {
   return {
     ...primaryArea,
+
+    quartile_income_normalized_w:
+      primaryArea.quartile_income_normalized * scales.median_under_city_average,
 
     non_eligable_upper_secondary_school_percent_normalized_w:
       primaryArea.non_eligable_upper_secondary_school_percent_normalized *
@@ -75,26 +103,26 @@ const applyWeights = (primaryArea) => {
     median_under_city_average_normalized_w:
       primaryArea.median_under_city_average_normalized *
       scales.median_under_city_average,
+
+    population_on_government_assistance_normalized_w:
+      primaryArea.population_on_government_assistance_normalized *
+      scales.population_on_government_assistance,
   };
 };
 
 const calculateIndex = (primaryArea) => {
   const {
-    median_under_city_average_normalized_w,
+    quartile_income_normalized_w,
     unemployed_percent_normalized_w,
     non_eligable_upper_secondary_school_percent_normalized_w,
+    population_on_government_assistance_normalized_w,
   } = primaryArea;
 
-  const weightSum =
-    scales.median_under_city_average +
-    scales.non_eligable_upper_secondary_school_percent +
-    scales.unemployed_percent;
-
   const composite_index =
-    (median_under_city_average_normalized_w +
-      unemployed_percent_normalized_w +
-      non_eligable_upper_secondary_school_percent_normalized_w) /
-    weightSum;
+    quartile_income_normalized_w +
+    unemployed_percent_normalized_w +
+    non_eligable_upper_secondary_school_percent_normalized_w +
+    population_on_government_assistance_normalized_w;
 
   const composite_index_rounded = getIndexValue(composite_index);
 
