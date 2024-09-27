@@ -156,11 +156,15 @@ const pickDataToExpose = ({
 });
 
 const getIndexClassification = (quartile) => {
-  if (quartile <= 0.1) return { status: "Blomstrande", color: "#00783c" };
-  if (quartile <= 0.25) return { status: "Välmående", color: "#a9ad39" };
-  if (quartile <= 0.5) return { status: "Stabilt", color: "#d8c500" };
-  if (quartile <= 0.75) return { status: "Sårbart", color: "#ec7a30" };
-  else return { status: "Utsatt", color: "#d82c09" };
+  if (quartile <= 0.1)
+    return { status: "Blomstrande", color: "#00783c", sorting: 1 };
+  if (quartile <= 0.25)
+    return { status: "Välmående", color: "#a9ad39", sorting: 2 };
+  if (quartile <= 0.5)
+    return { status: "Stabilt", color: "#d8c500", sorting: 3 };
+  if (quartile <= 0.75)
+    return { status: "Sårbart", color: "#ec7a30", sorting: 4 };
+  else return { status: "Utsatt", color: "#d82c09", sorting: 5 };
 };
 
 const addToGeoData = (indexData, geoData) => {
@@ -185,6 +189,8 @@ const addToGeoData = (indexData, geoData) => {
         Color: match.index_classification.color,
         Index: index,
         Name: name,
+        Status: match.index_classification.status,
+        Sorting: match.index_classification.sorting,
       },
     };
   });

@@ -135,10 +135,8 @@ path {
   align-items: center;
 }
 
-.tooltip {
-  text-align: center;
-  font-size: 12px;
-  opacity: 0;
+.legend-item {
+  font-size: x-small;
 }
 
 .headerSortDown:after,
