@@ -21,14 +21,29 @@ const drawMap = (mapEntries, err) => {
     .attr("width", width)
     .attr("height", height);
 
-  svg
-    .append("g")
-    .selectAll("path")
+  const g = svg.append("g");
+
+  const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+
+  svg.call(zoom);
+
+  function zoomed() {
+    g.attr("transform", d3.event.transform);
+    adjustStrokeWidth(d3.event.transform.k);
+  }
+
+  function adjustStrokeWidth(k) {
+    g.selectAll("path").style("stroke-width", 1 / k + "px");
+  }
+
+  g.selectAll("path")
     .data(mapEntries.features)
     .enter()
     .append("path")
     .attr("d", path)
     .style("fill", (d) => d.properties["Color"])
+    .style("stroke", "white") // Add a stroke color
+    .style("stroke-width", "1px")
     .on("mouseover", (event) => {
       const areaName = event.properties["Name"];
       const index = event.properties["Index"];
@@ -78,6 +93,16 @@ const createTooltip = () =>
     .style("font-size", "x-small");
 
 const createTitle = (svg) => {
+  svg
+    .append("rect")
+    .attr("x", 50)
+    .attr("y", 12)
+    .attr("width", 120)
+    .attr("height", 50)
+    .style("fill", "white")
+    .style("stroke", "white")
+    .style("stroke-width", "1px");
+
   svg
     .append("text")
     .attr("x", 55)
