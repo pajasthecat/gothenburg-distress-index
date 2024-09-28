@@ -73,8 +73,21 @@ const setTooltip = (tooltip, { color, index, areaName }) => {
   tooltip.style("color", "white");
   tooltip.transition().duration(200).style("opacity", 0.9);
 
+  const tooltipText = `
+    <table class="innerTable">
+      <tr>
+        <th>Område</th>
+        <td>${areaName}</td>
+      </tr>
+      <tr>
+        <th>IESG</th>
+        <td>${index}</td>
+      </tr>
+    </table>
+  `;
+
   tooltip
-    .html(`${areaName}<br>IESG: ${index}`)
+    .html(tooltipText)
     .style("left", posx + 10 + "px")
     .style("top", posy + 10 + "px");
 };

@@ -18,6 +18,30 @@ h2 {
   text-align: center;
 }
 
+.innerTable {
+  margin: auto;
+  width: 50px;
+  table-layout: auto;
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+.innerTable th {
+  font-size: x-small;
+  text-align: center;
+  font-weight: bold;
+  background-color: inherit;
+  padding: 4px;
+}
+
+.innerTable td {
+  font-size: x-small;
+  text-align: center;
+  background-color: inherit;
+  padding: 4px;
+  font-weight: inherit;
+}
+
 table {
   text-align: left;
   margin: auto;
@@ -144,7 +168,7 @@ path {
   content: " ";
   position: relative;
   left: 10px;
-  border: 7px solid transparent;
+  border: 7px outset transparent;
 }
 
 .headerSortDown:after {
