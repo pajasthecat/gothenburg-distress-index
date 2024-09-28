@@ -100,6 +100,8 @@ const createTitle = (svg) => {
     .attr("width", 120)
     .attr("height", 50)
     .style("fill", "white")
+    .style("opacity", 0.9)
+
     .style("stroke", "white")
     .style("stroke-width", "1px");
 
@@ -119,6 +121,17 @@ const createTitle = (svg) => {
 
 const createLabel = (svg, data) => {
   const legendData = getColors(data);
+
+  svg
+    .append("rect")
+    .attr("x", 312)
+    .attr("y", 185)
+    .attr("width", 95)
+    .attr("height", 70)
+    .style("fill", "white")
+    .style("stroke", "white")
+    .style("opacity", 0.9)
+    .style("stroke-width", "1px");
 
   const legend = svg
     .append("g")
