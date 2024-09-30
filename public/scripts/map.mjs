@@ -42,7 +42,7 @@ const drawMap = (mapEntries, err) => {
     .append("path")
     .attr("d", path)
     .style("fill", (d) => d.properties["Color"])
-    .style("stroke", "white") // Add a stroke color
+    .style("stroke", "white")
     .style("stroke-width", "1px")
     .on("mouseover", (event) => {
       const areaName = event.properties["Name"];
@@ -66,12 +66,7 @@ const removeTooltip = (tooltip) =>
   tooltip.transition().duration(500).style("opacity", 0);
 
 const setTooltip = (tooltip, { color, index, areaName }) => {
-  const posy = d3.event.pageY;
-  const posx = d3.event.pageX;
-
-  tooltip.style("background-color", color);
-  tooltip.style("color", "white");
-  tooltip.transition().duration(200).style("opacity", 0.9);
+  const { tooltipYPostiton, tooltipXPostiton } = getToolTipPosition();
 
   const tooltipText = `
     <table class="innerTable">
@@ -88,8 +83,26 @@ const setTooltip = (tooltip, { color, index, areaName }) => {
 
   tooltip
     .html(tooltipText)
-    .style("left", posx + 10 + "px")
-    .style("top", posy + 10 + "px");
+    .style("background-color", color)
+    .style("color", "white")
+    .style("left", `${tooltipXPostiton}px`)
+    .style("top", `${tooltipYPostiton}px`)
+    .transition()
+    .duration(200)
+    .style("opacity", 0.9);
+};
+
+const getToolTipPosition = () => {
+  const posy = d3.event.pageY;
+  const posx = d3.event.pageX;
+
+  const tooltipXPostiton = posx > 240 ? posx - 100 : posx + 10;
+  const tooltipYPostiton = posy + 10;
+
+  return {
+    tooltipXPostiton,
+    tooltipYPostiton,
+  };
 };
 
 const createTooltip = () =>
