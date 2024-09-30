@@ -19,13 +19,18 @@ export const getGovernmentAssistanceFigures = async () => {
 
   return response.data.reduce((agg, current) => {
     const area = current.key[0];
+    const year = current.key[3];
 
-    const index = agg.findIndex((a) => a.area === area);
+    const index = agg.findIndex((a) => a.area === area && a.year === year);
 
     if (index === -1)
       return [
         ...agg,
-        { area, populationOnGovernmentAssistance: parseInt(current.values[0]) },
+        {
+          area,
+          year,
+          populationOnGovernmentAssistance: parseInt(current.values[0]),
+        },
       ];
 
     agg[index].populationOnGovernmentAssistance += parseInt(current.values[0]);
@@ -43,11 +48,15 @@ export const getUnemploymentFigures = async () => {
   const data = response.data.map((d) => mapResponse(d, "unemployed"));
 
   return data.reduce((accumulator, current) => {
-    const match = accumulator.find((a) => a.area === current.area);
+    const match = accumulator.find(
+      (a) => a.area === current.area && a.year === current.year
+    );
 
     if (match === undefined) return [...accumulator, { ...current }];
 
-    const index = accumulator.findIndex((item) => item.area === match.area);
+    const index = accumulator.findIndex(
+      (item) => item.area === match.area && item.year === match.year
+    );
 
     const updatedMatch = {
       ...match,
@@ -68,11 +77,15 @@ export const getPopulation = async () => {
   const data = response.data.map((d) => mapResponse(d, "population"));
 
   return data.reduce((accumulator, current) => {
-    const match = accumulator.find((a) => a.area === current.area);
+    const match = accumulator.find(
+      (a) => a.area === current.area && a.year === current.year
+    );
 
     if (match === undefined) return [...accumulator, { ...current }];
 
-    const index = accumulator.findIndex((item) => item.area === match.area);
+    const index = accumulator.findIndex(
+      (item) => item.area === match.area && item.year === match.year
+    );
 
     const updatedMatch = {
       ...match,
@@ -94,14 +107,16 @@ export const getUsse = async () => {
     .filter((d) => d.key[1] === "0")
     .map((d) => {
       const area = d.key[0];
+      const year = d.key[3];
       const eligible = parseInt(d.values[0]);
 
-      return { area, eligible };
+      return { area, eligible, year };
     });
 
   return data.map((d) => {
     const match = response.data.find(
-      (res) => res.key[0] === d.area && res.key[1] === "1"
+      (res) =>
+        res.key[0] === d.area && res.key[3] === d.year && res.key[1] === "1"
     );
 
     const nonEligible = parseInt(match.values[0]);
@@ -123,7 +138,8 @@ const fetchData = async (url, body) => {
 
 const mapResponse = (data, valueName) => {
   const area = data.key[0];
+  const year = data.key[3];
   const value = parseInt(data.values[0]);
 
-  return { area, [valueName]: value };
+  return { area, year, [valueName]: value };
 };

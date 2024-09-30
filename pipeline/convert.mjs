@@ -1,6 +1,6 @@
 import { quantileRank } from "simple-statistics";
 
-import { round, getIndexValue } from "../src/helpers.mjs";
+import { getIndexValue } from "../src/helpers.mjs";
 
 const scales = {
   median_under_city_average: 0.25,

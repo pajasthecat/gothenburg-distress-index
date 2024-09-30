@@ -59,16 +59,51 @@ export const collectData = async () => {
     getGovernmentAssistanceFigures(),
   ]);
 
-  const mergedData = unemployment.map(({ area, unemployed }) =>
-    mergeAreaData(
+  const groupedByYear = unemployment.reduce((agg, current) => {
+    const year = current.year;
+    const unemployed = current.unemployed;
+    const index = agg.findIndex((a) => a.year === current.year);
+
+    const population = populationData.find((_) => _.year === year);
+    const medianIncome = medianIncomeData.find((_) => _.year === year);
+    const usseByArea = usse.find((_) => _.year === year);
+    const { populationOnGovernmentAssistance } = governmentAssistanceData.find(
+      (_) => _.year === year
+    );
+
+    if (index == -1) {
+      return [
+        ...agg,
+        {
+          year: current.year,
+          data: {
+            unemployed,
+            population,
+            medianIncome,
+            nonEligible,
+            eligible,
+            populationOnGovernmentAssistance,
+          },
+        },
+      ];
+    }
+
+    return agg;
+  });
+
+  const mergedData = groupedByYear.map((dataByYear) => {
+    const { area, unemployed } = dataByYear;
+
+    return mergeAreaData(
       area,
       unemployed,
       populationData,
       medianIncomeData,
       usse,
       governmentAssistanceData
-    )
-  );
+    );
+  });
+
   return {
     primary_areas: mergedData,
     gothenburg: {
