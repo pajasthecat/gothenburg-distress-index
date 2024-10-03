@@ -10,15 +10,19 @@ const scales = {
 };
 
 export const convert = ({ primary_areas, gothenburg, geoData }) => {
-  const indexData = primary_areas
-    .map((primaryArea, _, array) =>
-      calculateIndexMembers(primaryArea, gothenburg, array)
-    )
-    .map(normalize)
-    .map(applyWeights)
-    .map(calculateIndex)
-    .map(calculateQuartile)
-    .map(pickDataToExpose);
+  const indexData = primary_areas.map(({ year, data }) => {
+    const t = data
+      .map((primaryArea, _, array) =>
+        calculateIndexMembers(primaryArea, gothenburg, array)
+      )
+      .map(normalize)
+      .map(applyWeights)
+      .map(calculateIndex)
+      .map(calculateQuartile)
+      .map(pickDataToExpose);
+
+    return { year, data: t };
+  });
 
   const updatedGeoData = addToGeoData(indexData, geoData);
 
@@ -169,29 +173,37 @@ const getIndexClassification = (quartile) => {
 
 const addToGeoData = (indexData, geoData) => {
   const features = geoData.features.map((feat) => {
-    const match = indexData.find((primaryArea) => {
-      const areaCode = primaryArea.area.split(" ")[0];
+    const years = indexData.map(({ year, data }) => {
+      const match = data.find((primaryArea) => {
+        const areaCode = primaryArea.area.split(" ")[0];
 
-      return areaCode === feat.properties["PrimaryAreaCode"];
+        return areaCode === feat.properties["PrimaryAreaCode"];
+      });
+      return { year, match };
     });
 
-    const index = match.index;
+    const properties = years.map(({ year, match }) => {
+      const index = match.index;
 
-    const name = match.area
-      .split(" ")
-      .splice(1, 2)
-      .toString()
-      .replace(",", " ");
+      const name = match.area
+        .split(" ")
+        .splice(1, 2)
+        .toString()
+        .replace(",", " ");
 
-    return {
-      ...feat,
-      properties: {
+      return {
         Color: match.index_classification.color,
         Index: index,
         Name: name,
         Status: match.index_classification.status,
         Sorting: match.index_classification.sorting,
-      },
+        Year: year,
+      };
+    });
+
+    return {
+      ...feat,
+      properties,
     };
   });
 

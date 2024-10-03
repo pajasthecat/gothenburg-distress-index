@@ -1,65 +1,70 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@5/+esm";
 
-const drawMap = (mapEntries, err) => {
+const drawMap = (mapEntries, err, years) => {
   if (err) throw err;
+  years.forEach((year, index) => {
+    const yearFilter = (prop) => prop.Year === year;
 
-  const height = 300;
-  const width = 480;
+    const height = 300;
+    const width = 480;
 
-  const myProjection = d3
-    .geoAlbers()
-    .rotate([-25, 1, 1])
-    .fitSize([width, height], mapEntries);
+    const myProjection = d3
+      .geoAlbers()
+      .rotate([-25, 1, 1])
+      .fitSize([width, height], mapEntries);
 
-  const path = d3.geoPath().projection(myProjection);
+    const path = d3.geoPath().projection(myProjection);
 
-  const tooltip = createTooltip();
+    const tooltip = createTooltip();
 
-  const svg = d3
-    .select("#svg")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    const svg = d3
+      .select("#svg")
+      .append("svg")
+      .attr("id", `svg-${year}`)
+      .style("display", index === 0 ? "block" : "none")
+      .attr("width", width)
+      .attr("height", height);
 
-  const g = svg.append("g");
+    const g = svg.append("g");
 
-  const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+    const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
-  svg.call(zoom);
+    svg.call(zoom);
 
-  function zoomed() {
-    g.attr("transform", d3.event.transform);
-    adjustStrokeWidth(d3.event.transform.k);
-  }
+    function zoomed() {
+      g.attr("transform", d3.event.transform);
+      adjustStrokeWidth(d3.event.transform.k);
+    }
 
-  function adjustStrokeWidth(k) {
-    g.selectAll("path").style("stroke-width", 1 / k + "px");
-  }
+    function adjustStrokeWidth(k) {
+      g.selectAll("path").style("stroke-width", 1 / k + "px");
+    }
 
-  g.selectAll("path")
-    .data(mapEntries.features)
-    .enter()
-    .append("path")
-    .attr("d", path)
-    .style("fill", (d) => d.properties["Color"])
-    .style("stroke", "white")
-    .style("stroke-width", "1px")
-    .on("mouseover", (event) => {
-      const areaName = event.properties["Name"];
-      const index = event.properties["Index"];
-      const color = event.properties["Color"];
+    g.selectAll("path")
+      .data(mapEntries.features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .style("fill", (d) => d.properties.find(yearFilter)["Color"])
+      .style("stroke", "white")
+      .style("stroke-width", "1px")
+      .on("mouseover", (event) => {
+        const areaName = event.properties.find(yearFilter)["Name"];
+        const index = event.properties.find(yearFilter)["Index"];
+        const color = event.properties.find(yearFilter)["Color"];
 
-      setTooltip(tooltip, {
-        color,
-        index,
-        areaName,
-      });
-    })
-    .on("mouseout", () => removeTooltip(tooltip));
+        setTooltip(tooltip, {
+          color,
+          index,
+          areaName,
+        });
+      })
+      .on("mouseout", () => removeTooltip(tooltip));
 
-  createTitle(svg);
+    createTitle(svg, year);
 
-  createLabel(svg, mapEntries);
+    createLabel(svg, mapEntries);
+  });
 };
 
 const removeTooltip = (tooltip) =>
@@ -118,7 +123,7 @@ const createTooltip = () =>
     .style("pointer-events", "none")
     .style("font-size", "x-small");
 
-const createTitle = (svg) => {
+const createTitle = (svg, year) => {
   svg
     .append("rect")
     .attr("x", 50)
@@ -142,7 +147,7 @@ const createTitle = (svg) => {
     .attr("x", 55)
     .attr("y", 50)
     .style("font-size", "x-small")
-    .text("primärområden 2024");
+    .text(`primärområden ${year}`);
 };
 
 const createLabel = (svg, data) => {
@@ -193,9 +198,9 @@ const createLabel = (svg, data) => {
 const getColors = (data) => {
   return data.features
     .reduce((acc, curr) => {
-      const color = curr.properties["Color"];
-      const status = curr.properties["Status"];
-      const sorting = curr.properties["Sorting"];
+      const color = curr.properties[0]["Color"];
+      const status = curr.properties[0]["Status"];
+      const sorting = curr.properties[0]["Sorting"];
 
       const match = acc.findIndex((item) => item?.label === status);
 
@@ -205,5 +210,11 @@ const getColors = (data) => {
     .sort((a, b) => a.sorting - b.sorting);
 };
 
-export const createPrimaryAreaMap = async () =>
-  d3.json("../data/distress-index.geojson").then(drawMap);
+export const createPrimaryAreaMap = async (year) =>
+  d3
+    .json("../data/distress-index.geojson")
+    .then((data, error) => drawMap(data, error, year));
+
+export const deleteMap = () => {
+  document.getElementById("svg").innerHTML = "";
+};

@@ -66,6 +66,12 @@ th {
   cursor: pointer;
 }
 
+.sliderItem {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;

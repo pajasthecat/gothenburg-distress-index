@@ -8,40 +8,6 @@ import {
 
 import { readFileSync } from "fs";
 
-const mergeAreaData = (
-  area,
-  unemployed,
-  populationData,
-  medianIncomeData,
-  usse,
-  governmentAssistanceData
-) => {
-  const { population } = populationData.find((_) => _.area === area);
-  const { medianIncome } = medianIncomeData.find((_) => _.area === area);
-  const { nonEligible, eligible } = usse.find((_) => _.area === area);
-  const { populationOnGovernmentAssistance } = governmentAssistanceData.find(
-    (_) => _.area === area
-  );
-
-  return {
-    area,
-    population,
-    median_income: medianIncome,
-    governmentAssistance: {
-      total: populationOnGovernmentAssistance,
-      percent: populationOnGovernmentAssistance / population,
-    },
-    unemployed: {
-      total: unemployed,
-      percent: unemployed / population,
-    },
-    usse: {
-      eligible,
-      non_eligible: nonEligible,
-    },
-  };
-};
-
 export const collectData = async () => {
   const geoData = JSON.parse(readFileSync("data/data.geojson"));
 
@@ -61,51 +27,75 @@ export const collectData = async () => {
 
   const groupedByYear = unemployment.reduce((agg, current) => {
     const year = current.year;
+    const area = current.area;
     const unemployed = current.unemployed;
-    const index = agg.findIndex((a) => a.year === current.year);
+    const yearIndex = agg.findIndex((a) => a.year === year);
 
-    const population = populationData.find((_) => _.year === year);
-    const medianIncome = medianIncomeData.find((_) => _.year === year);
-    const usseByArea = usse.find((_) => _.year === year);
-    const { populationOnGovernmentAssistance } = governmentAssistanceData.find(
-      (_) => _.year === year
-    );
+    const conditional = (_) => _.year === year && _.area === area;
 
-    if (index == -1) {
+    const { population } = populationData.find(conditional);
+    const { medianIncome } = medianIncomeData.find(conditional);
+    const { nonEligible, eligible } = usse.find(conditional);
+    const { populationOnGovernmentAssistance } =
+      governmentAssistanceData.find(conditional);
+
+    if (yearIndex === -1) {
       return [
         ...agg,
         {
-          year: current.year,
-          data: {
-            unemployed,
-            population,
-            medianIncome,
-            nonEligible,
-            eligible,
-            populationOnGovernmentAssistance,
-          },
+          year,
+          data: [
+            {
+              area,
+              population,
+              median_income: medianIncome,
+              governmentAssistance: {
+                total: populationOnGovernmentAssistance,
+                percent: populationOnGovernmentAssistance / population,
+              },
+              unemployed: {
+                total: unemployed,
+                percent: unemployed / population,
+              },
+              usse: {
+                eligible,
+                non_eligible: nonEligible,
+              },
+            },
+          ],
         },
       ];
     }
 
+    agg[yearIndex] = {
+      ...agg[yearIndex],
+      data: [
+        ...agg[yearIndex].data,
+        {
+          area,
+          population,
+          median_income: medianIncome,
+          governmentAssistance: {
+            total: populationOnGovernmentAssistance,
+            percent: populationOnGovernmentAssistance / population,
+          },
+          unemployed: {
+            total: unemployed,
+            percent: unemployed / population,
+          },
+          usse: {
+            eligible,
+            non_eligible: nonEligible,
+          },
+        },
+      ],
+    };
+
     return agg;
-  });
-
-  const mergedData = groupedByYear.map((dataByYear) => {
-    const { area, unemployed } = dataByYear;
-
-    return mergeAreaData(
-      area,
-      unemployed,
-      populationData,
-      medianIncomeData,
-      usse,
-      governmentAssistanceData
-    );
-  });
+  }, []);
 
   return {
-    primary_areas: mergedData,
+    primary_areas: groupedByYear,
     gothenburg: {
       median_income: medianIncomeData.slice(-1)[0].medianIncome,
     },

@@ -1,7 +1,8 @@
 const data = await (await fetch("../data/distress-index.json")).json();
 const areas = await (await fetch("../data/primary-area.json")).json();
 
-import { createPrimaryAreaMap } from "./map.mjs";
+import { createPrimaryAreaMap, deleteMap } from "./map.mjs";
+import { configuration } from "../config.js";
 
 const compareAsc = (first, second, comparer) => {
   switch (comparer) {
@@ -42,43 +43,46 @@ const setSortArrow = (table, index) => {
   });
 };
 
-const setUpAllPrimaryAreas = () => {
+const setUpAllPrimaryAreas = (year) => {
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
-
-  data.forEach((value) => {
-    const template = `
+  data
+    .find((d) => d.year === year)
+    .data.forEach((value) => {
+      const template = `
     <tr style="background-color: ${value.index_classification.color}; color: white">
          <td>${value.area}</td>
          <td>${value.index_classification.status}</td>
          <td>${value.index}</td>
        </tr>
    `;
-    allPrimaryAreas.innerHTML += template;
-  });
+      allPrimaryAreas.innerHTML += template;
+    });
 };
 
-const resetAllPrimaryAreas = () => {
+const resetAllPrimaryAreas = (year) => {
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
 
   for (var i = 1; i < allPrimaryAreas.rows.length; ) {
     allPrimaryAreas.deleteRow(i);
   }
 
-  data.forEach((value) => {
-    const template = `
+  data
+    .find((d) => d.year === year)
+    .data.forEach((value) => {
+      const template = `
     <tr style="background-color: ${value.index_classification.color}; color: white">
          <td>${value.area}</td>
          <td>${value.index_classification.status}</td>
          <td>${value.index}</td>
        </tr>
    `;
-    allPrimaryAreas.innerHTML += template;
-  });
+      allPrimaryAreas.innerHTML += template;
+    });
 
   setSortingEventListeners();
 };
 
-const handleSearchPrimaryAreas = (searchText) => {
+const handleSearchPrimaryAreas = (searchText, year) => {
   if (!searchText) return setUpAllPrimaryAreas();
 
   if (searchText.length <= 3) return;
@@ -103,7 +107,9 @@ const handleSearchPrimaryAreas = (searchText) => {
       return [...agg, current.primary_area];
     }, []);
 
-  const selectedData = filtered?.map((f) => data.find((d) => d.area === f));
+  const selectedData = filtered?.map((f) =>
+    data.find((d) => d.year === year).data.find((d) => d.area === f)
+  );
 
   selectedData?.forEach((value) => {
     const template = `
@@ -192,15 +198,48 @@ const setSortingEventListeners = () => {
 const setSearchEventListeners = () =>
   document
     .getElementById("searchText")
-    .addEventListener("input", (e) =>
+    .addEventListener("change", (e) =>
       e?.target?.value === ""
-        ? resetAllPrimaryAreas()
-        : handleSearchPrimaryAreas(e?.target?.value)
+        ? resetAllPrimaryAreas(
+            document.getElementById("yearSlider").value.toString()
+          )
+        : handleSearchPrimaryAreas(
+            e?.target?.value,
+            document.getElementById("yearSlider").value.toString()
+          )
     );
 
-createPrimaryAreaMap();
+const setUpYearRange = () => {
+  const yearSlider = document.getElementById("yearSlider");
 
-setUpAllPrimaryAreas();
+  if (yearSlider.value === "50") {
+    yearSlider.max = configuration.yearRange[0];
+    yearSlider.min = configuration.yearRange.slice(-1);
+    yearSlider.value = configuration.yearRange[0];
+  }
+
+  document.getElementById("yearValue").innerHTML = ` ${yearSlider.value}`;
+
+  yearSlider.addEventListener("change", (event) => {
+    const index = event.target.value;
+
+    const allSvg = document.querySelectorAll('svg[id^="svg-"]');
+
+    allSvg.forEach((text) => (text.style.display = "none"));
+
+    const svgToActivate = document.getElementById(`svg-${index}`);
+
+    svgToActivate.style.display = "block";
+
+    document.getElementById("yearValue").innerHTML = ` ${index}`;
+  });
+};
+
+createPrimaryAreaMap(configuration.yearRange);
+
+setUpYearRange();
+
+setUpAllPrimaryAreas(document.getElementById("yearSlider").value.toString());
 
 setSortingEventListeners();
 
