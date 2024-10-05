@@ -1,3 +1,5 @@
+import { configuration as conf } from "../../public/config.js";
+
 export const configuration = {
   usse: {
     url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Inkomst och utbildning/Utbildning/30_Gymnbehorig_PRI.px",
@@ -7,7 +9,7 @@ export const configuration = {
           code: "År",
           selection: {
             filter: "item",
-            values: ["2022"],
+            values: conf.yearRange,
           },
         },
       ],
@@ -38,7 +40,7 @@ export const configuration = {
           code: "År",
           selection: {
             filter: "item",
-            values: ["2022"],
+            values: conf.yearRange,
           },
         },
       ],
@@ -76,7 +78,7 @@ export const configuration = {
           code: "År",
           selection: {
             filter: "item",
-            values: ["2022"],
+            values: conf.yearRange,
           },
         },
       ],
@@ -107,7 +109,7 @@ export const configuration = {
           code: "År",
           selection: {
             filter: "item",
-            values: ["2021"],
+            values: conf.yearRange,
           },
         },
       ],
@@ -152,7 +154,9 @@ export const configuration = {
           code: "År",
           selection: {
             filter: "item",
-            values: ["2022"],
+            values: conf.yearRange.map((year) =>
+              year === "2020" ? "202" : year
+            ),
           },
         },
       ],

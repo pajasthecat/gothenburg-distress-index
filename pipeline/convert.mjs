@@ -11,7 +11,7 @@ const scales = {
 
 export const convert = ({ primary_areas, gothenburg, geoData }) => {
   const indexData = primary_areas.map(({ year, data }) => {
-    const t = data
+    const indexOutput = data
       .map((primaryArea, _, array) =>
         calculateIndexMembers(primaryArea, gothenburg, array)
       )
@@ -21,7 +21,7 @@ export const convert = ({ primary_areas, gothenburg, geoData }) => {
       .map(calculateQuartile)
       .map(pickDataToExpose);
 
-    return { year, data: t };
+    return { year, data: indexOutput };
   });
 
   const updatedGeoData = addToGeoData(indexData, geoData);

@@ -4,6 +4,8 @@ const areas = await (await fetch("../data/primary-area.json")).json();
 import { createPrimaryAreaMap, deleteMap } from "./map.mjs";
 import { configuration } from "../config.js";
 
+const getYear = () => document.getElementById("yearSlider").value.toString();
+
 const compareAsc = (first, second, comparer) => {
   switch (comparer) {
     case "number":
@@ -43,7 +45,9 @@ const setSortArrow = (table, index) => {
   });
 };
 
-const setUpAllPrimaryAreas = (year) => {
+const setUpAllPrimaryAreas = () => {
+  const year = getYear();
+
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
   data
     .find((d) => d.year === year)
@@ -59,12 +63,19 @@ const setUpAllPrimaryAreas = (year) => {
     });
 };
 
-const resetAllPrimaryAreas = (year) => {
+const resetAllPrimaryAreas = () => {
+  const year = getYear();
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
 
+  console.log({ allPrimaryAreas });
+
   for (var i = 1; i < allPrimaryAreas.rows.length; ) {
+    console.log({ i });
+
     allPrimaryAreas.deleteRow(i);
   }
+
+  console.log({ allPrimaryAreas: allPrimaryAreas.rows.length });
 
   data
     .find((d) => d.year === year)
@@ -78,12 +89,17 @@ const resetAllPrimaryAreas = (year) => {
    `;
       allPrimaryAreas.innerHTML += template;
     });
+
+  console.log({ allPrimaryAreas: allPrimaryAreas.rows.length });
 
   setSortingEventListeners();
 };
 
-const handleSearchPrimaryAreas = (searchText, year) => {
-  if (!searchText) return setUpAllPrimaryAreas();
+const handleSearchPrimaryAreas = () => {
+  const year = getYear();
+  const searchText = document.getElementById("searchText").value;
+
+  if (!searchText) return setUpAllPrimaryAreas(year);
 
   if (searchText.length <= 3) return;
 
@@ -198,15 +214,10 @@ const setSortingEventListeners = () => {
 const setSearchEventListeners = () =>
   document
     .getElementById("searchText")
-    .addEventListener("change", (e) =>
+    .addEventListener("input", (e) =>
       e?.target?.value === ""
-        ? resetAllPrimaryAreas(
-            document.getElementById("yearSlider").value.toString()
-          )
-        : handleSearchPrimaryAreas(
-            e?.target?.value,
-            document.getElementById("yearSlider").value.toString()
-          )
+        ? resetAllPrimaryAreas()
+        : handleSearchPrimaryAreas()
     );
 
 const setUpYearRange = () => {
@@ -232,15 +243,29 @@ const setUpYearRange = () => {
     svgToActivate.style.display = "block";
 
     document.getElementById("yearValue").innerHTML = ` ${index}`;
+
+    resetAllPrimaryAreas();
+
+    handleSearchPrimaryAreas();
   });
+};
+
+const setEsgiTitle = () => {
+  const esgiTitle = document.getElementById("esgiTitle");
+
+  esgiTitle.innerHTML = `ESGI ${configuration.yearRange.slice(-1)} -  ${
+    configuration.yearRange[0]
+  }`;
 };
 
 createPrimaryAreaMap(configuration.yearRange);
 
 setUpYearRange();
 
-setUpAllPrimaryAreas(document.getElementById("yearSlider").value.toString());
+setUpAllPrimaryAreas();
 
 setSortingEventListeners();
 
 setSearchEventListeners();
+
+setEsgiTitle();
