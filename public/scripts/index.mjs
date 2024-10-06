@@ -2,6 +2,7 @@ const data = await (await fetch("../data/distress-index.json")).json();
 const areas = await (await fetch("../data/primary-area.json")).json();
 
 import { createPrimaryAreaMap, deleteMap } from "./map.mjs";
+import { showMap } from "./map2.mjs";
 import { configuration } from "../config.js";
 
 const getYear = () => document.getElementById("yearSlider").value.toString();
@@ -67,15 +68,9 @@ const resetAllPrimaryAreas = () => {
   const year = getYear();
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
 
-  console.log({ allPrimaryAreas });
-
   for (var i = 1; i < allPrimaryAreas.rows.length; ) {
-    console.log({ i });
-
     allPrimaryAreas.deleteRow(i);
   }
-
-  console.log({ allPrimaryAreas: allPrimaryAreas.rows.length });
 
   data
     .find((d) => d.year === year)
@@ -90,8 +85,6 @@ const resetAllPrimaryAreas = () => {
       allPrimaryAreas.innerHTML += template;
     });
 
-  console.log({ allPrimaryAreas: allPrimaryAreas.rows.length });
-
   setSortingEventListeners();
 };
 
@@ -99,7 +92,7 @@ const handleSearchPrimaryAreas = () => {
   const year = getYear();
   const searchText = document.getElementById("searchText").value;
 
-  if (!searchText) return setUpAllPrimaryAreas(year);
+  if (!searchText) return resetAllPrimaryAreas();
 
   if (searchText.length <= 3) return;
 
@@ -244,7 +237,7 @@ const setUpYearRange = () => {
 
     document.getElementById("yearValue").innerHTML = ` ${index}`;
 
-    resetAllPrimaryAreas();
+    // resetAllPrimaryAreas();
 
     handleSearchPrimaryAreas();
   });
@@ -258,7 +251,9 @@ const setEsgiTitle = () => {
   }`;
 };
 
-createPrimaryAreaMap(configuration.yearRange);
+// createPrimaryAreaMap(configuration.yearRange);
+
+showMap();
 
 setUpYearRange();
 

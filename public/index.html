@@ -36,6 +36,12 @@
 
     <h2 id="esgiTitle">Översikt över ESGI 2024</h2>
 
+    <div class="inputContainer">
+      <div class="sliderItem">
+        <label for="yearSlider"><b>År:</b> </label> <span id="yearValue"></span>
+      </div>
+      <input type="range" step="1" id="yearSlider" />
+    </div>
     <p>
       För en visuell presentation kan du se indexet på en karta över Göteborg,
       där varje område är färgkodat efter sitt ekonomiska indexvärde. Genom att
@@ -46,12 +52,6 @@
       <div id="svg"></div>
     </div>
 
-    <div class="inputContainer">
-      <input type="range" step="1" id="yearSlider" />
-      <div class="sliderItem">
-        <label for="yearSlider"><b>År:</b> </label> <span id="yearValue"></span>
-      </div>
-    </div>
     <p>
       Tabellen nedan listar alla primärområden med deras indexvärden och
       klassificeringar. Du kan enkelt söka efter specifika områden, se vilket
