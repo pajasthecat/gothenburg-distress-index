@@ -161,4 +161,49 @@ export const configuration = {
       },
     },
   },
+  medianIncomeYears: {
+    url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Inkomst och utbildning/Inkomster/Förvärvsinkomster etc/23_InkomsterUtbildning_PRI.px",
+    body: (years) => ({
+      query: [
+        {
+          code: "Ålder",
+          selection: {
+            filter: "item",
+            values: ["18- år"],
+          },
+        },
+        {
+          code: "Kön",
+          selection: {
+            filter: "item",
+            values: ["Båda kön"],
+          },
+        },
+        {
+          code: "Utbildningsnivå",
+          selection: {
+            filter: "item",
+            values: ["Totalt (alla utbildningsnivåer)"],
+          },
+        },
+        {
+          code: "Tabellvärde",
+          selection: {
+            filter: "item",
+            values: ["Medianinkomst"],
+          },
+        },
+        {
+          code: "År",
+          selection: {
+            filter: "item",
+            values: years,
+          },
+        },
+      ],
+      response: {
+        format: "json",
+      },
+    }),
+  },
 };

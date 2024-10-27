@@ -11,6 +11,29 @@ export const getMedianIncome = async () => {
   return data;
 };
 
+export const getMedianIncomes = async (years) => {
+  const response = await fetchData(
+    configuration.medianIncomeYears.url,
+    configuration.medianIncomeYears.body(years)
+  );
+
+  const data = response.data
+    .map((d) => mapResponseByYear(d, "medianIncome"))
+    .reduce((agg, current) => {
+      const { area, medianIncome, year } = current;
+
+      const data = { area, medianIncome };
+
+      const choosenYear = agg[year];
+
+      if (!choosenYear) return { [year]: [data] };
+
+      return { [year]: [...choosenYear, data] };
+    }, {});
+
+  return data;
+};
+
 export const getGovernmentAssistanceFigures = async () => {
   const response = await fetchData(
     configuration.welfareRecipients.url,
@@ -126,4 +149,12 @@ const mapResponse = (data, valueName) => {
   const value = parseInt(data.values[0]);
 
   return { area, [valueName]: value };
+};
+
+const mapResponseByYear = (data, valueName) => {
+  const area = data.key[0];
+  const year = data.key[5];
+  const value = parseInt(data.values[0]);
+
+  return { area, [valueName]: value, year };
 };

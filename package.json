@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "node dev-server.js",
-    "pipeline:run": "node pipeline/index.mjs",
+    "pipeline:run": "node pipelines/iesg/index.mjs",
+    "pipeline:gb:run": "node pipelines/gb/index.mjs",
     "start": "yarn pipeline:run && yarn dev"
   }
 }
