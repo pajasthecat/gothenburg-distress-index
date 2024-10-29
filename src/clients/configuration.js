@@ -206,4 +206,45 @@ export const configuration = {
       },
     }),
   },
+  houseOwnershipRateYears: {
+    url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Bostäder och byggande/Bostadsbestånd/20_Typ_upplatelse_PRI.px",
+    body: (years) => ({
+      query: [
+        {
+          code: "Hustyp",
+          selection: {
+            filter: "item",
+            values: [
+              "Småhus",
+              "Flerbostadshus",
+              "Övriga hus",
+              "Specialbostäder",
+            ],
+          },
+        },
+        {
+          code: "Upplåtelseform",
+          selection: {
+            filter: "item",
+            values: [
+              "Hyresrätt",
+              "Bostadsrätt",
+              "Äganderätt",
+              "Uppgift saknas",
+            ],
+          },
+        },
+        {
+          code: "År",
+          selection: {
+            filter: "item",
+            values: years,
+          },
+        },
+      ],
+      response: {
+        format: "json",
+      },
+    }),
+  },
 };

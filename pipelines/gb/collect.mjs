@@ -1,5 +1,5 @@
 import { getAllHousePrices } from "../../src/clients/booliClient.mjs";
-import {  getMedianIncomes } from "../../src/clients/client.mjs";
+import {  getMedianIncomes, getPropertyOwnershipRate } from "../../src/clients/client.mjs";
 
 import { toPriceByYear } from "../../src/mappers/booliMappers.mjs";
 import { readCache, writeCache } from "../../src/clients/cache/cache.mjs";
@@ -34,30 +34,33 @@ import primaryAreas from "../commonInputData/primary-area.json" with {type:"json
   return allPropertiesPrices;
 };
 
-const mergeDataByYear = ({propertyPrices, medianIncomes}) => Object.keys(propertyPrices).reduce((aggregate, year) => {  
-  const data = propertyPrices[year].reduce((agg, data) => {
+const mergeDataByYear = ({propertyPrices, medianIncomes, propertyOwnershipRates}) => Object.keys(propertyPrices).reduce((aggregate, year) => {  
+  const primaryArea = propertyPrices[year].reduce((agg, data) => {
     const {area, propertyPrices} = data;
 
     const medianIncome = medianIncomes[year]?.find(m => m.area === area)?.medianIncome;
+    const propertyOwnershipRate = propertyOwnershipRates[year]?.find(m => m.area === area)?.propertyOwnershipRate
 
    if(!medianIncome) {
     return agg;
    }
 
-    return [...agg, {area, propertyPrices, medianIncome}]
+    return [...agg, {area, propertyPrices, medianIncome, propertyOwnershipRate}]
   }, []);
 
-  if(!data || data.length === 0) return aggregate;
+  if(!primaryArea || primaryArea.length === 0) return aggregate;
 
-  return {...aggregate, [year]: data}
+  return {...aggregate, [year]: {primaryArea, gothenburg: {
+    medianIncome: medianIncomes[year].slice(-1)[0].medianIncome,
+  },}}
 },{});
 
 export const collect = async () => {
   const { years } = config;
 
-  const [propertyPrices, medianIncomes] = await Promise.all([getPropertyPricesPerYear(years), getMedianIncomes(years)]);  
+  const [propertyPrices, medianIncomes, propertyOwnershipRates] = await Promise.all([getPropertyPricesPerYear(years), getMedianIncomes(years), getPropertyOwnershipRate(years)]);  
 
-  const mergedData = mergeDataByYear({propertyPrices, medianIncomes});
+  const mergedData = mergeDataByYear({propertyPrices, medianIncomes, propertyOwnershipRates});  
 
   return mergedData;
 };

@@ -11,6 +11,47 @@ export const getMedianIncome = async () => {
   return data;
 };
 
+export const getPropertyOwnershipRate = async (years) => {
+  const response = await fetchData(
+    configuration.houseOwnershipRateYears.url,
+    configuration.houseOwnershipRateYears.body(years)
+  );
+
+  const data = response.data.reduce((agg, response) => {
+    const [area, _, type, year] = response.key;
+    const value = parseInt(response.values[0]);
+
+    const rent = type === "Hyresrätt" ? value : 0;
+    const own = type === "Bostadsrätt" || type === "Äganderätt" ? value : 0;
+    const other = type === "Uppgift saknas" ? value : 0;
+
+    const chosenYear = agg[year];
+
+    const data = { area, propertyOwnershipRate: { rent, own, other } };
+
+    if (!chosenYear) return { [year]: [data] };
+
+    const index = chosenYear.findIndex((_) => _.area === area);
+
+    if (index === -1) {
+      return { [year]: [...chosenYear, data] };
+    }
+
+    chosenYear[index] = {
+      area,
+      propertyOwnershipRate: {
+        rent: chosenYear[index].propertyOwnershipRate.rent + rent,
+        other: chosenYear[index].propertyOwnershipRate.other + other,
+        own: chosenYear[index].propertyOwnershipRate.own + own,
+      },
+    };
+
+    return { [year]: [...chosenYear] };
+  }, {});
+
+  return data;
+};
+
 export const getMedianIncomes = async (years) => {
   const response = await fetchData(
     configuration.medianIncomeYears.url,
