@@ -4,7 +4,7 @@ import {
   getMedianIncome,
   getUsse,
   getGovernmentAssistanceFigures,
-} from "../../../src/clients/client.mjs";
+} from "../../../src/clients/gothenburgStatisticsClient.mjs";
 
 const mergeAreaData = (
   area,
