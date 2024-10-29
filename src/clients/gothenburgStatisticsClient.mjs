@@ -1,5 +1,33 @@
 import { configuration } from "./configuration.js";
-import {  mapMedianIncomes, mapPopulation, mapResponse, mapUnemploymentFigures, mapUsse, mapGovernmentAssistance} from "../mappers/gothenburgStatisticsMappers.mjs";
+import {
+  mapMedianIncomes,
+  mapPopulation,
+  mapResponse,
+  mapUnemploymentFigures,
+  mapUsse,
+  mapGovernmentAssistance,
+  mapPropertyOwnershipRate,
+  mapMovingData,
+  mapPopulationByYear,
+} from "../mappers/gothenburgStatisticsMappers.mjs";
+
+export const getMovingData = async (years) => {
+  const response = await fetchData(
+    configuration.movingData.url,
+    configuration.movingData.body(years)
+  );
+
+  return mapMovingData(response);
+};
+
+export const getPropertyOwnershipRate = async (years) => {
+  const response = await fetchData(
+    configuration.houseOwnershipRateYears.url,
+    configuration.houseOwnershipRateYears.body(years)
+  );
+
+  return mapPropertyOwnershipRate(response);
+};
 
 export const getMedianIncome = async () => {
   const response = await fetchData(
@@ -7,7 +35,7 @@ export const getMedianIncome = async () => {
     configuration.medianIncome.body
   );
 
-  return  response.data.map((d) => mapResponse(d, "medianIncome"));
+  return response.data.map((d) => mapResponse(d, "medianIncome"));
 };
 
 export const getMedianIncomes = async (years) => {
@@ -16,7 +44,7 @@ export const getMedianIncomes = async (years) => {
     configuration.medianIncomeYears.body(years)
   );
 
- return mapMedianIncomes(response);
+  return mapMedianIncomes(response);
 };
 
 export const getGovernmentAssistanceFigures = async () => {
@@ -25,7 +53,7 @@ export const getGovernmentAssistanceFigures = async () => {
     configuration.welfareRecipients.body
   );
 
- return mapGovernmentAssistance(response);
+  return mapGovernmentAssistance(response);
 };
 
 export const getUnemploymentFigures = async () => {
@@ -34,7 +62,7 @@ export const getUnemploymentFigures = async () => {
     configuration.unemployment.body
   );
 
- return mapUnemploymentFigures(response);
+  return mapUnemploymentFigures(response);
 };
 
 export const getPopulation = async () => {
@@ -43,7 +71,16 @@ export const getPopulation = async () => {
     configuration.population.body
   );
 
-   return mapPopulation(response);
+  return mapPopulation(response);
+};
+
+export const getPopulationByYear = async (years) => {
+  const response = await fetchData(
+    configuration.populationByYear.url,
+    configuration.populationByYear.body(years)
+  );
+
+  return mapPopulationByYear(response);
 };
 
 export const getUsse = async () => {
@@ -65,5 +102,3 @@ const fetchData = async (url, body) => {
 
   return await response.json();
 };
-
-

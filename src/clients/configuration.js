@@ -47,6 +47,37 @@ export const configuration = {
       },
     },
   },
+  populationByYear: {
+    url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Befolkning/Folkmängd/Folkmängd helår/10_FolkmHelar_PRI.px",
+    body: (years) => ({
+      query: [
+        {
+          code: "Ålder",
+          selection: {
+            filter: "agg:Ettårs_13.agg",
+            values: ["20-64 år"],
+          },
+        },
+        {
+          code: "Kön",
+          selection: {
+            filter: "item",
+            values: ["Man", "Kvinna"],
+          },
+        },
+        {
+          code: "År",
+          selection: {
+            filter: "item",
+            values: years,
+          },
+        },
+      ],
+      response: {
+        format: "json",
+      },
+    }),
+  },
   unemployment: {
     url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Arbetsmarknad/Arbetslöshet/10_AntalArblos_PRI.px",
     body: {
@@ -231,6 +262,57 @@ export const configuration = {
               "Bostadsrätt",
               "Äganderätt",
               "Uppgift saknas",
+            ],
+          },
+        },
+        {
+          code: "År",
+          selection: {
+            filter: "item",
+            values: years,
+          },
+        },
+      ],
+      response: {
+        format: "json",
+      },
+    }),
+  },
+  movingData: {
+    url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Befolkning/Flyttningar/10_PRI_Flytt_Alla.px",
+    body: (years) => ({
+      query: [
+        {
+          code: "Ålder",
+          selection: {
+            filter: "item",
+            values: [
+              "0-5 år",
+              "6-15 år",
+              "16-17 år",
+              "18-24 år",
+              "25-34 år",
+              "35-44 år",
+              "45-54 år",
+              "55-64 år",
+              "65-74 år",
+              "75- år",
+            ],
+          },
+        },
+        {
+          code: "Typ av flyttning",
+          selection: {
+            filter: "item",
+            values: [
+              "Inflyttning från annat primärområde i Göteborg",
+              "Utflyttning till annat primärområde i Göteborg",
+              "Inflyttning från kommun i Stor-Göteborg",
+              "Utflyttning till kommun i Stor-Göteborg",
+              "Inflyttning från övriga riket",
+              "Utflyttning till övriga riket",
+              "Invandring",
+              "Utvandring",
             ],
           },
         },
