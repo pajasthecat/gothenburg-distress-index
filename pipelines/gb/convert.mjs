@@ -2,22 +2,32 @@ import { median } from "simple-statistics";
 
 export const convert = (data) =>
   Object.keys(data).reduce((agg, year) => {
+    const cityMedianIncome = data[year].gothenburg.medianIncome;
+
     const updatedData = data[year].primaryArea
-      .map((_) =>
-        calculateMedianIncomeToMedianHousePrice(
-          _,
-          data[year].gothenburg.medianIncome
-        )
-      )
+      .map(calculateMedianIncomeToMedianHousePrice.bind(null, cityMedianIncome))
       .map(calculateOwnershipRate)
-      .map(calculateNetMigration);
+      .map(calculateNetMigration)
+      .map(calculateOverCrowdedRate);
 
     return { ...agg, [year]: updatedData };
   }, {});
 
+const calculateOverCrowdedRate = (dataByArea) => {
+  const { indexData, overCrowdingRate: overCrowding, area } = dataByArea;
+
+  if (!overCrowding) return 0;
+
+  const overCrowdingRate =
+    overCrowding.crowded /
+    (overCrowding.crowded + overCrowding.notCrowded + overCrowding.other);
+
+  return { ...dataByArea, indexData: { ...indexData, overCrowdingRate } };
+};
+
 const calculateMedianIncomeToMedianHousePrice = (
-  dataByArea,
-  gothenBurgMedianIncome
+  gothenBurgMedianIncome,
+  dataByArea
 ) => {
   const { propertyPrices, medianIncome } = dataByArea;
 

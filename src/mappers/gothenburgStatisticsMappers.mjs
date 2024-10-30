@@ -198,3 +198,36 @@ export const mapMovingData = (response) =>
 
     return { [year]: [...chosenYear] };
   }, {});
+
+export const mapOverCrowdingRate = (response) =>
+  response.data.reduce((agg, { key, values }) => {
+    const [area, _, crowdedStatus, year] = key;
+    const value = parseInt(values[0]);
+
+    const crowded = crowdedStatus === "Trångbodd" ? value : 0;
+    const notCrowded = crowdedStatus === "Ej trångbodd" ? value : 0;
+    const other =
+      crowdedStatus === "Uppgift saknas eller ej flerbostadshus" ? value : 0;
+    const data = { area, overCrowdingRate: { crowded, notCrowded, other } };
+
+    const chosenYear = agg[year];
+
+    if (!chosenYear) return { [year]: [data] };
+
+    const index = chosenYear.findIndex((_) => _.area === area);
+
+    if (index === -1) {
+      return { [year]: [...chosenYear, data] };
+    }
+
+    chosenYear[index] = {
+      area,
+      overCrowdingRate: {
+        crowded: chosenYear[index].overCrowdingRate.crowded + crowded,
+        notCrowded: chosenYear[index].overCrowdingRate.notCrowded + notCrowded,
+        other: chosenYear[index].overCrowdingRate.other + other,
+      },
+    };
+
+    return { [year]: [...chosenYear] };
+  }, {});

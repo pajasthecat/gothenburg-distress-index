@@ -9,6 +9,7 @@ import {
   mapPropertyOwnershipRate,
   mapMovingData,
   mapPopulationByYear,
+  mapOverCrowdingRate,
 } from "../mappers/gothenburgStatisticsMappers.mjs";
 
 export const getMovingData = async (years) => {
@@ -90,6 +91,15 @@ export const getUsse = async () => {
   );
 
   return mapUsse(response);
+};
+
+export const getOverCrowdingRate = async (years) => {
+  const response = await fetchData(
+    configuration.overCrowdingRate.url,
+    configuration.overCrowdingRate.body(years)
+  );
+
+  return mapOverCrowdingRate(response);
 };
 
 const fetchData = async (url, body) => {

@@ -329,4 +329,40 @@ export const configuration = {
       },
     }),
   },
+  overCrowdingRate: {
+    url: "https://statistikdatabas.goteborg.se/api/v1/sv/1. Göteborg och dess delområden/Primärområden/Befolkning/Trångboddhet/10_Trangbodd_PRI.px",
+    body: (years) => ({
+      query: [
+        {
+          code: "Ålder",
+          selection: {
+            filter: "item",
+            values: [
+              "0-5 år",
+              "6-15 år",
+              "16-18 år",
+              "19-24 år",
+              "25-34 år",
+              "35-44 år",
+              "45-54 år",
+              "55-64 år",
+              "65-74 år",
+              "75-84 år",
+              "85- år",
+            ],
+          },
+        },
+        {
+          code: "År",
+          selection: {
+            filter: "item",
+            values: years,
+          },
+        },
+      ],
+      response: {
+        format: "json",
+      },
+    }),
+  },
 };
