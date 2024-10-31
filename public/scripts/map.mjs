@@ -169,7 +169,7 @@ const createLabel = (svg, data) => {
     .enter()
     .append("g")
     .attr("class", "legend-item")
-    .attr("transform", (d, i) => `translate(300, ${175 + i * 10})`);
+    .attr("transform", (d, i) => `translate(300, ${175 + i * 15})`);
 
   // Add colored rectangles
   legendItems
