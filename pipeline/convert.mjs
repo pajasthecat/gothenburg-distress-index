@@ -161,9 +161,9 @@ const getIndexClassification = (quartile) => {
   if (quartile <= 0.25)
     return { status: "Välmående", color: "#a9ad39", sorting: 2 };
   if (quartile <= 0.5)
-    return { status: "Stabilt", color: "#d8c500", sorting: 3 };
+    return { status: "Stabilt", color: "#B59100", sorting: 3 };
   if (quartile <= 0.75)
-    return { status: "Sårbart", color: "#ec7a30", sorting: 4 };
+    return { status: "Sårbart", color: "#D97706", sorting: 4 };
   else return { status: "Utsatt", color: "#d82c09", sorting: 5 };
 };
 
