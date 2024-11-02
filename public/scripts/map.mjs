@@ -116,32 +116,30 @@ const createTooltip = () =>
     .style("border-radius", "5px")
     .style("padding", "5px")
     .style("pointer-events", "none")
-    .style("font-size", "x-small");
 
 const createTitle = (svg) => {
   svg
     .append("rect")
     .attr("x", 50)
     .attr("y", 12)
-    .attr("width", 120)
-    .attr("height", 50)
+    .attr("width", 140)
+    .attr("height", 45)
     .style("fill", "white")
     .style("opacity", 0.9)
-
     .style("stroke", "white")
     .style("stroke-width", "1px");
 
   svg
     .append("text")
+    .attr("class", "mapTitle")
     .attr("x", 55)
     .attr("y", 30)
-    .style("font-size", "x-small")
     .text("Göteborgs");
   svg
     .append("text")
+    .attr("class", "mapTitle")
     .attr("x", 55)
     .attr("y", 50)
-    .style("font-size", "x-small")
     .text("primärområden 2024");
 };
 
@@ -152,7 +150,7 @@ const createLabel = (svg, data) => {
     .append("rect")
     .attr("x", 312)
     .attr("y", 185)
-    .attr("width", 95)
+    .attr("width", 110)
     .attr("height", 70)
     .style("fill", "white")
     .style("stroke", "white")
@@ -171,7 +169,7 @@ const createLabel = (svg, data) => {
     .enter()
     .append("g")
     .attr("class", "legend-item")
-    .attr("transform", (d, i) => `translate(300, ${175 + i * 10})`);
+    .attr("transform", (d, i) => `translate(300, ${175 + i * 15})`);
 
   // Add colored rectangles
   legendItems

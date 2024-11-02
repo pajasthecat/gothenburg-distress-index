@@ -1,6 +1,6 @@
 body {
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
   margin-left: auto;
   margin-right: auto;
   width: 30%;
@@ -27,7 +27,7 @@ h2 {
 }
 
 .innerTable th {
-  font-size: x-small;
+  font-size: small;
   text-align: center;
   font-weight: bold;
   background-color: inherit;
@@ -35,7 +35,7 @@ h2 {
 }
 
 .innerTable td {
-  font-size: x-small;
+  font-size: small;
   text-align: center;
   background-color: inherit;
   padding: 4px;
@@ -70,16 +70,16 @@ th {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 input {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Courier New', monospace;
   font-size: 16px;
 }
 
 input::placeholder {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -122,7 +122,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border-width: 0;
   cursor: pointer;
   display: inline-block;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 20px;
   list-style: none;
@@ -139,8 +139,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
 select {
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
 }
 
 path {
@@ -161,7 +161,15 @@ path {
 }
 
 .legend-item {
-  font-size: x-small;
+  font-size: 12px;
+}
+
+.mapTitle {
+  font-size: 12px;
+}
+
+.tooltip{
+  font-size: 12px;
 }
 
 .headerSortDown:after,
@@ -185,9 +193,10 @@ path {
 @media screen and (max-width: 800px) {
   body {
     width: 90%;
+    font-size: 14px;
   }
   td,
   th {
-    font-size: x-small;
+    font-size: smaller;
   }
 }
