@@ -17,15 +17,15 @@ export const addToGeoData = (indexData, geoData) => {
 };
 
 export const addGbDataToGeoData = (indexData, geoData) => {
-  const features = geoData.features.map((feat) => {
+  const features = geoData.features.map((feat, i) => {
     const { index, name, match } = getMatch(indexData, feat);
     return {
       ...feat,
       properties: {
-        Color: match?.color ?? "white",
+        Color: match?.color ?? i % 2 === 1 ? "blue" : "white",
         Index: index,
         Name: name,
-        Status: match?.status ?? "test",
+        Status: match?.status ?? i % 2 === 1 ? "blue" : "white",
       },
     };
   });
