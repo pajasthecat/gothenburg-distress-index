@@ -1,6 +1,7 @@
 import { quantileRank } from "simple-statistics";
 
-import { round, getIndexValue } from "../../src/helpers.mjs";
+import { getIndexValue } from "../../src/helpers.mjs";
+import { addToGeoData } from "../../src/mappers/geoDataEnricher.mjs";
 
 const scales = {
   median_under_city_average: 0.25,
@@ -165,37 +166,6 @@ const getIndexClassification = (quartile) => {
   if (quartile <= 0.75)
     return { status: "Sårbart", color: "#D97706", sorting: 4 };
   else return { status: "Utsatt", color: "#d82c09", sorting: 5 };
-};
-
-const addToGeoData = (indexData, geoData) => {
-  const features = geoData.features.map((feat) => {
-    const match = indexData.find((primaryArea) => {
-      const areaCode = primaryArea.area.split(" ")[0];
-
-      return areaCode === feat.properties["PrimaryAreaCode"];
-    });
-
-    const index = match.index;
-
-    const name = match.area
-      .split(" ")
-      .splice(1, 2)
-      .toString()
-      .replace(",", " ");
-
-    return {
-      ...feat,
-      properties: {
-        Color: match.index_classification.color,
-        Index: index,
-        Name: name,
-        Status: match.index_classification.status,
-        Sorting: match.index_classification.sorting,
-      },
-    };
-  });
-
-  return { ...geoData, features };
 };
 
 const getNonElibiablePercent = (p) => {

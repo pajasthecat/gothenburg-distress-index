@@ -41,23 +41,25 @@ const mergeDataByYear = ({
   propertyOwnershipRates, 
   movingPatterns, 
   populations,
-  overCrowdingRates}) => Object.keys(propertyPrices).reduce((aggregate, year) => {  
-  const primaryArea = propertyPrices[year].reduce((agg, data) => {
-    const {area, propertyPrices} = data;    
+  overCrowdingRates}) => Object.keys(medianIncomes).reduce((aggregate, year) => {  
+  const primaryArea = medianIncomes[year].reduce((agg, data) => {
+    const {area, medianIncome} = data;    
+
+    if(area === "Göteborg") return agg;
 
     const compare = m => normalizeString(m.area) === normalizeString(area) 
 
-    const medianIncome = medianIncomes[year]?.find(compare)?.medianIncome;
+    const propertyPricesData = propertyPrices[year]?.find(compare)?.propertyPrices;
     const propertyOwnershipRate = propertyOwnershipRates[year]?.find(compare)?.propertyOwnershipRate
     const movingPattern = movingPatterns[year]?.find(compare)?.movingPattern
     const population = populations[year]?.find(compare)?.population
     const overCrowdingRate = overCrowdingRates[year]?.find(compare)?.overCrowdingRate
 
-   if(!medianIncome) {
+   if(!medianIncome) {    
     return agg;
    }
 
-    return [...agg, {area, propertyPrices, medianIncome, propertyOwnershipRate, movingPattern, population, overCrowdingRate}]
+    return [...agg, {area, propertyPrices: propertyPricesData, medianIncome, propertyOwnershipRate, movingPattern, population, overCrowdingRate}]
   }, []);
 
   if(!primaryArea || primaryArea.length === 0) return aggregate;
@@ -79,6 +81,6 @@ export const collect = async () => {
     getOverCrowdingRate(years)]);  
 
   const mergedData = mergeDataByYear({propertyPrices, medianIncomes, propertyOwnershipRates, movingPatterns, populations, overCrowdingRates});  
-
+  
   return mergedData;
 };

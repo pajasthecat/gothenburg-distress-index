@@ -1,6 +1,7 @@
-import { median } from "simple-statistics";
+import { median, quantileRank } from "simple-statistics";
 
 import { calculateZScore, getMeanAndStd } from "../../src/normalizers.mjs";
+import { createPrimaryAreaMap } from "../../src/generators/mapGenerator.mjs";
 
 const scales = {
   gothenburgMedianIncomeToMedianHousePrice: 0.25,
@@ -23,7 +24,9 @@ export const convert = (data) =>
       .map(calculateIndex)
       .map(pickDataToExpose);
 
-    return { ...agg, [year]: index };
+    const map = createPrimaryAreaMap(index, year);
+
+    return { ...agg, [year]: { index, map } };
   }, {});
 
 const pickDataToExpose = ({
@@ -38,8 +41,6 @@ const pickDataToExpose = ({
     value,
   },
 }) => {
-  console.log({ area });
-
   return {
     area,
     netMigration,
@@ -132,7 +133,15 @@ const getMedianIncomeToMedianHousePrice = (
   medianIncome,
   gothenBurgMedianIncome
 ) => {
-  const medianPropertyPrice = median(propertyPrices.map((pp) => pp.price));
+  const allPrices = propertyPrices?.map((pp) => pp?.price);
+
+  if (!allPrices || allPrices.length === 0)
+    return {
+      gothenburgMedianIncomeToMedianHousePrice: 0,
+      primaryAreaMedianIncomeToMedianHousePrice: 0,
+    };
+
+  const medianPropertyPrice = median(allPrices);
 
   return {
     gothenburgMedianIncomeToMedianHousePrice:
@@ -143,7 +152,7 @@ const getMedianIncomeToMedianHousePrice = (
 };
 
 const calculateOwnershipRate = (dataByArea) => {
-  const { propertyOwnershipRate } = dataByArea;
+  const { propertyOwnershipRate, area } = dataByArea;
 
   return (
     propertyOwnershipRate.own /
