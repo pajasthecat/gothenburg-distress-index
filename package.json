@@ -10,9 +10,11 @@
     "simple-statistics": "^7.8.5"
   },
   "scripts": {
-    "dev": "node dev-server.js",
+    "dev:iesg": "node dev-server.js public",
+    "dev:gb": "node dev-server.js gb/public",
     "pipeline:run": "node pipelines/iesg/index.mjs",
     "pipeline:gb:run": "node pipelines/gb/index.mjs",
-    "start": "yarn pipeline:run && yarn dev"
+    "start": "yarn pipeline:run && yarn dev:iesg",
+    "start:gb": "yarn pipeline:gb:run && yarn dev:gb"
   }
 }

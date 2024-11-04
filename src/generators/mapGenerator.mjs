@@ -2,7 +2,7 @@ import d3Pkg from "d3";
 const { select, geoAlbers, geoPath, event } = d3Pkg;
 import d3ZoomPkg from "d3-zoom";
 const { zoom: d3Zoom, event: zoomEvent } = d3ZoomPkg;
-import { writeFileSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 
 import { addGbDataToGeoData } from "../mappers/geoDataEnricher.mjs";
@@ -68,8 +68,6 @@ const drawMap = (mapEntries, year) => {
   createTitle(svg, year);
 
   createLabel(svg, mapEntries);
-
-  writeFileSync("out.svg", svgContainer.html());
 
   return svgContainer.html();
 };

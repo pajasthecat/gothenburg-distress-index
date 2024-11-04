@@ -19,13 +19,18 @@ export const addToGeoData = (indexData, geoData) => {
 export const addGbDataToGeoData = (indexData, geoData) => {
   const features = geoData.features.map((feat, i) => {
     const { index, name, match } = getMatch(indexData, feat);
+
+    const {
+      value,
+      classification: { status, color },
+    } = index;
     return {
       ...feat,
       properties: {
-        Color: match?.color ?? i % 2 === 1 ? "blue" : "white",
-        Index: index,
+        Color: color,
+        Index: value,
         Name: name,
-        Status: match?.status ?? i % 2 === 1 ? "blue" : "white",
+        Status: status,
       },
     };
   });
@@ -39,7 +44,6 @@ const getMatch = (indexData, feature) => {
 
     return areaCode === feature.properties["PrimaryAreaCode"];
   });
-  // console.log({ feature, match, indexData });
 
   const index = match.index;
 

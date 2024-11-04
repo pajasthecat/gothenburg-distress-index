@@ -6,7 +6,7 @@ import { readCache, writeCache } from "../../src/clients/cache/cache.mjs";
 import {  normalizeString } from "../../src/normalizers.mjs";
 
 import { config } from "./configuration.mjs";
-import primaryAreas from "../commonInputData/primary-area.json" with {type:"json"};
+import primaryAreas from "../../data/primary-area.json" with {type:"json"};
 
  const getPropertyPricesPerYear = async (years) => {
 

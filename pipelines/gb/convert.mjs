@@ -22,33 +22,39 @@ export const convert = (data) =>
     const index = normalizeParameters(updatedData)
       .map(applyWeights)
       .map(calculateIndex)
-      .map(pickDataToExpose);
+      .map(calculateQuartile);
 
     const map = createPrimaryAreaMap(index, year);
 
     return { ...agg, [year]: { index, map } };
   }, {});
 
-const pickDataToExpose = ({
-  area,
-  index: {
-    raw: {
-      netMigration,
-      gothenburgMedianIncomeToMedianHousePrice,
-      ownershipRate,
-      overCrowdingRate,
-    },
-    value,
-  },
-}) => {
+const calculateQuartile = (primaryArea, _, array) => {
+  const allIndexEntries = array.map((_) => _.index.value);
+
+  const quartile = quantileRank(allIndexEntries, primaryArea.index.value);
+
+  const classification = getIndexClassification(quartile);
+
   return {
-    area,
-    netMigration,
-    gothenburgMedianIncomeToMedianHousePrice,
-    ownershipRate,
-    overCrowdingRate,
-    index: value,
+    ...primaryArea,
+    index: {
+      ...primaryArea.index,
+      indexQuartile: quartile,
+      classification,
+    },
   };
+};
+
+const getIndexClassification = (quartile) => {
+  if (quartile >= 0.75)
+    return { status: "Prisvärt", color: "#4CAF50", sorting: 1 };
+  if (quartile >= 0.5)
+    return { status: "Överkomligt", color: "#8BC34A", sorting: 2 };
+  if (quartile >= 0.25)
+    return { status: "Neutralt", color: "#FFEB3B", sorting: 3 };
+  if (quartile >= 0.1) return { status: "Dyrt", color: "#FF9800", sorting: 4 };
+  else return { status: "Väldigt dyrt", color: "#F44336", sorting: 5 };
 };
 
 const calculateIndex = (dataByArea) => {
@@ -247,7 +253,7 @@ const normalizeParameters = (dataByYear) => {
   });
 };
 
-const applyWeights = (dataByArea) => {
+const applyWeights = (primaryArea) => {
   const {
     index: {
       normalized: {
@@ -257,12 +263,12 @@ const applyWeights = (dataByArea) => {
         overCrowdingRate,
       },
     },
-  } = dataByArea;
+  } = primaryArea;
 
   return {
-    ...dataByArea,
+    ...primaryArea,
     index: {
-      ...dataByArea.index,
+      ...primaryArea.index,
       scaled: {
         netMigration: netMigration * scales.netMigration,
         gothenburgMedianIncomeToMedianHousePrice:
