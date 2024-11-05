@@ -1,5 +1,23 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@5/+esm";
 
+export const initializeZoom = () => {
+  const svg = d3.select("#svg"); 
+  const g = svg.select("g"); 
+
+  const zoom = d3.zoom()
+    .scaleExtent([1, 8]) 
+    .on("zoom", () => {
+      g.attr("transform", d3.event.transform);
+      adjustStrokeWidth(d3.event.transform.k); 
+    });
+
+  svg.call(zoom); 
+};
+
+const adjustStrokeWidth = (k) => {
+  d3.selectAll("path").style("stroke-width", 1 / k + "px");
+};
+
 export const tooltip = () => {
     const tooltip = createTooltip();
 

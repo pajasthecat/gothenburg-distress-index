@@ -1,7 +1,5 @@
 import d3Pkg from "d3";
 const { select, geoAlbers, geoPath, event } = d3Pkg;
-import d3ZoomPkg from "d3-zoom";
-const { zoom: d3Zoom, event: zoomEvent } = d3ZoomPkg;
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 
@@ -30,19 +28,6 @@ const drawMap = (mapEntries, labels) => {
     .attr("height", height);
 
   const g = svg.append("g");
-
-  const zoom = d3Zoom().scaleExtent([1, 8]).on("zoom", zoomed);
-
-  svg.call(zoom);
-
-  function zoomed() {
-    g.attr("transform", zoomEvent.transform);
-    adjustStrokeWidth(zoomEvent.transform.k);
-  }
-
-  function adjustStrokeWidth(k) {
-    g.selectAll("path").style("stroke-width", 1 / k + "px");
-  }
 
   g.selectAll("path")
     .data(mapEntries.features)
