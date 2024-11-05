@@ -24,7 +24,7 @@ export const convert = (data) =>
       .map(calculateIndex)
       .map(calculateQuartile);
 
-    const map = createPrimaryAreaMap(index, year);
+    const map = createPrimaryAreaMap(index, {year, mapTitle:"Primärområden", indexTitle: ""});
 
     return { ...agg, [year]: { index, map } };
   }, {});

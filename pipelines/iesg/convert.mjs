@@ -153,7 +153,9 @@ const pickDataToExpose = ({
 }) => ({
   area,
   index: composite_index_rounded,
-  index_classification,
+  color: index_classification.color,
+  status: index_classification.status,
+  sorting: index_classification.sorting,
 });
 
 const getIndexClassification = (quartile) => {

@@ -1,4 +1,4 @@
-export const htmTemplate = (map) => `
+export const htmTemplate = (map, indexTitle) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,20 +10,10 @@ export const htmTemplate = (map) => `
   </head>
   <body>
     <h1>Göteborgs Boendebarometer</h1>
-    <p>
-      lorem 
-    </p>
 
     <div class="mapContainer">
       <div id="svg"> ${map}</div>
     </div>
-
-    <p>
-      Tabellen nedan listar alla primärområden med deras indexvärden och
-      klassificeringar. Du kan enkelt söka efter specifika områden, se vilket
-      område din adress tillhör, eller sortera tabellen genom att klicka på
-      rubrikerna i respektive kolumn.
-    </p>
 
     <form id="searchTextForm">
       <div class="inputContainer">
@@ -42,7 +32,7 @@ export const htmTemplate = (map) => `
         <tr>
           <th id="table-header-area" class="headerSortUp">Område</th>
           <th id="table-header-status">Status</th>
-          <th id="table-header-index">IESG</th>
+          <th id="table-header-index">${indexTitle}</th>
         </tr>
       </table>
     </div>

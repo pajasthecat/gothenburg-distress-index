@@ -7,7 +7,9 @@ import { JSDOM } from "jsdom";
 
 import { addGbDataToGeoData } from "../mappers/geoDataEnricher.mjs";
 
-const drawMap = (mapEntries, year) => {
+const drawMap = (mapEntries, labels) => {
+
+  const  {year, mapTitle, indexTitle} = labels
   const domObj = new JSDOM(`<!DOCTYPE html><body><div id="svg"></div></body>`);
 
   let svgContainer = select(domObj.window.document.getElementById("svg"));
@@ -65,7 +67,7 @@ const drawMap = (mapEntries, year) => {
     })
     .on("mouseout", () => removeTooltip(tooltip));
 
-  createTitle(svg, year);
+  createTitle(svg, year, mapTitle);
 
   createLabel(svg, mapEntries);
 
@@ -85,7 +87,7 @@ const setTooltip = (tooltip, { color, index, areaName }) => {
         <td>${areaName}</td>
       </tr>
       <tr>
-        <th>IESG</th>
+        <th>${indexTitle}</th>
         <td>${index}</td>
       </tr>
     </table>
@@ -124,34 +126,32 @@ const createTooltip = (svgContainer) =>
     .style("border", "1px solid white")
     .style("border-radius", "5px")
     .style("padding", "5px")
-    .style("pointer-events", "none")
-    .style("font-size", "x-small");
+    .style("pointer-events", "none");
 
-const createTitle = (svg, year) => {
+const createTitle = (svg, year, mapTitle) => {
   svg
     .append("rect")
     .attr("x", 50)
     .attr("y", 12)
-    .attr("width", 120)
-    .attr("height", 50)
+    .attr("width", 140)
+    .attr("height", 45)
     .style("fill", "white")
     .style("opacity", 0.9)
-
     .style("stroke", "white")
     .style("stroke-width", "1px");
 
   svg
     .append("text")
+    .attr("class", "mapTitle")
     .attr("x", 55)
     .attr("y", 30)
-    .style("font-size", "x-small")
     .text("Göteborgs");
   svg
     .append("text")
+    .attr("class", "mapTitle")
     .attr("x", 55)
     .attr("y", 50)
-    .style("font-size", "x-small")
-    .text(`primärområden ${year}`);
+    .text(`${mapTitle} ${year}`);
 };
 
 const createLabel = (svg, data) => {
@@ -161,7 +161,7 @@ const createLabel = (svg, data) => {
     .append("rect")
     .attr("x", 312)
     .attr("y", 185)
-    .attr("width", 95)
+    .attr("width", 110)
     .attr("height", 70)
     .style("fill", "white")
     .style("stroke", "white")
@@ -180,8 +180,7 @@ const createLabel = (svg, data) => {
     .enter()
     .append("g")
     .attr("class", "legend-item")
-    .attr("transform", (d, i) => `translate(300, ${175 + i * 10})`);
-
+    .attr("transform", (d, i) => `translate(300, ${175 + i * 15})`);
   // Add colored rectangles
   legendItems
     .append("rect")
@@ -214,8 +213,8 @@ const getColors = (data) => {
     .sort((a, b) => a.sorting - b.sorting);
 };
 
-export const createPrimaryAreaMap = (indexData, year) => {
+export const createPrimaryAreaMap = (indexData, options) => {
   const geoData = JSON.parse(readFileSync("data/data.geojson"));
   const mapData = addGbDataToGeoData(indexData, geoData);
-  return drawMap(mapData, year);
+  return drawMap(mapData, options);
 };

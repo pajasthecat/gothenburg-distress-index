@@ -4,11 +4,11 @@ export const addToGeoData = (indexData, geoData) => {
     return {
       ...feat,
       properties: {
-        Color: match.index_classification.color,
+        Color: match.color,
         Index: index,
         Name: name,
-        Status: match.index_classification.status,
-        Sorting: match.index_classification.sorting,
+        Status: match.status,
+        Sorting: match.sorting,
       },
     };
   });

@@ -2,8 +2,6 @@ import express from "express";
 
 const path = process.argv[2];
 
-console.log({ path });
-
 const app = express();
 const port = 3000;
 
