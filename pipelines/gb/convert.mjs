@@ -2,13 +2,9 @@ import { median, quantileRank } from "simple-statistics";
 
 import { calculateZScore, getMeanAndStd } from "../../src/normalizers.mjs";
 import { createPrimaryAreaMap } from "../../src/generators/mapGenerator.mjs";
-
-const scales = {
-  gothenburgMedianIncomeToMedianHousePrice: 0.25,
-  ownershipRate: 0.25,
-  netMigration: 0.25,
-  overCrowdingRate: 0.25,
-};
+import { round } from "../../src/helpers.mjs";
+import { config } from "./configuration.mjs";
+const { indexTitle, scales } = config;
 
 export const convert = (data) =>
   Object.keys(data).reduce((agg, year) => {
@@ -24,7 +20,7 @@ export const convert = (data) =>
       .map(calculateIndex)
       .map(calculateQuartile);
 
-    const map = createPrimaryAreaMap(index, {year, mapTitle:"Primärområden", indexTitle: ""});
+    const map = createPrimaryAreaMap(index, {year, mapTitle:"Primärområden", indexTitle: indexTitle});
 
     return { ...agg, [year]: { index, map } };
   }, {});
@@ -47,13 +43,13 @@ const calculateQuartile = (primaryArea, _, array) => {
 };
 
 const getIndexClassification = (quartile) => {
-  if (quartile >= 0.75)
+  if (quartile <= 0.1)
     return { status: "Prisvärt", color: "#4CAF50", sorting: 1 };
-  if (quartile >= 0.5)
+  if (quartile <= 0.25)
     return { status: "Överkomligt", color: "#8BC34A", sorting: 2 };
-  if (quartile >= 0.25)
+  if (quartile <= 0.5)
     return { status: "Neutralt", color: "#FFEB3B", sorting: 3 };
-  if (quartile >= 0.1) return { status: "Dyrt", color: "#FF9800", sorting: 4 };
+  if (quartile <= 0.75) return { status: "Dyrt", color: "#FF9800", sorting: 4 };
   else return { status: "Väldigt dyrt", color: "#F44336", sorting: 5 };
 };
 
@@ -78,11 +74,13 @@ const calculateIndex = (dataByArea) => {
     ownershipRateInverted +
     overCrowdingRate;
 
+    const roundedIndex = round(result);
+
   return {
     ...dataByArea,
     index: {
       ...index,
-      value: result,
+      value: roundedIndex,
     },
   };
 };

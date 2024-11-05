@@ -1,9 +1,11 @@
-import { htmTemplate } from "./templates/html.mjs";
+import { htmlTemplate } from "./templates/html.mjs";
+import { config } from "./configuration.mjs";
+const { indexTitle } = config;
 
 import { writeFileSync } from "fs";
 
 export const persist = ({ index, map }) => {
-  const html = htmTemplate(map, "GB");
+  const html = htmlTemplate(map, indexTitle);
 
   const dataToPersist = index.map((_) => {
     const {

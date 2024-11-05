@@ -1,4 +1,4 @@
-export const htmTemplate = (map, indexTitle) => `
+export const htmlTemplate = (map, indexTitle) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>

@@ -1,0 +1,81 @@
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@5/+esm";
+
+export const tooltip = () => {
+    const tooltip = createTooltip();
+
+    d3
+    .select("#svg")
+    .selectAll("path")
+    .on("mouseover",  (_, i, nodes) => {   
+        const target = nodes[i];
+        
+        const areaName = target.getAttribute("data-name");
+        const index = target.getAttribute("data-index");
+        const color = target.getAttribute("data-color");
+        const indexTitle = target.getAttribute("data-index-title");
+  
+        setTooltip(tooltip, {
+          color,
+          index,
+          areaName,
+          indexTitle
+        });
+      })
+      .on("mouseout", () => removeTooltip(tooltip));
+}
+
+const createTooltip = () =>
+    d3
+      .select("#svg")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+      .style("position", "absolute")
+      .style("border", "1px solid white")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+      .style("pointer-events", "none")
+
+const removeTooltip = (tooltip) =>
+    tooltip.transition().duration(500).style("opacity", 0);
+  
+  const setTooltip = (tooltip, { color, index, areaName, indexTitle }) => {
+    const { tooltipYPostiton, tooltipXPostiton } = getToolTipPosition();
+  
+    const tooltipText = `
+      <table class="innerTable">
+        <tr>
+          <th>Område</th>
+          <td>${areaName}</td>
+        </tr>
+        <tr>
+          <th>${indexTitle}</th>
+          <td>${index}</td>
+        </tr>
+      </table>
+    `;
+  
+    tooltip
+      .html(tooltipText)
+      .style("background-color", color)
+      .style("color", "white")
+      .style("left", `${tooltipXPostiton}px`)
+      .style("top", `${tooltipYPostiton}px`)
+      .transition()
+      .duration(200)
+      .style("opacity", 0.9);
+  };
+  
+  const getToolTipPosition = () => {
+    const posy = d3.event.pageY;
+    const posx = d3.event.pageX;
+  
+    const tooltipXPostiton = posx > 240 ? posx - 100 : posx + 10;
+    const tooltipYPostiton = posy + 10;
+  
+    return {
+      tooltipXPostiton,
+      tooltipYPostiton,
+    };
+  };
+  

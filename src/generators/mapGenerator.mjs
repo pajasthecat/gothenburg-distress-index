@@ -22,8 +22,6 @@ const drawMap = (mapEntries, labels) => {
 
   const path = geoPath().projection(myProjection);
 
-  const tooltip = createTooltip(svgContainer);
-
   const svg = svgContainer
     .append("svg")
     .attr("id", `svg-${year}`)
@@ -51,21 +49,13 @@ const drawMap = (mapEntries, labels) => {
     .enter()
     .append("path")
     .attr("d", path)
+    .attr("data-color", d => d.properties["Color"])
+    .attr("data-name", d => d.properties["Name"])    
+    .attr("data-index", d => d.properties["Index"])
+    .attr("data-index-title", () => indexTitle)
     .style("fill", (d) => d.properties["Color"])
     .style("stroke", "white")
     .style("stroke-width", "1px")
-    .on("mouseover", (event) => {
-      const areaName = event.properties["Name"];
-      const index = event.properties["Index"];
-      const color = event.properties["Color"];
-
-      setTooltip(tooltip, {
-        color,
-        index,
-        areaName,
-      });
-    })
-    .on("mouseout", () => removeTooltip(tooltip));
 
   createTitle(svg, year, mapTitle);
 
@@ -74,59 +64,6 @@ const drawMap = (mapEntries, labels) => {
   return svgContainer.html();
 };
 
-const removeTooltip = (tooltip) =>
-  tooltip.transition().duration(500).style("opacity", 0);
-
-const setTooltip = (tooltip, { color, index, areaName }) => {
-  const { tooltipYPostiton, tooltipXPostiton } = getToolTipPosition();
-
-  const tooltipText = `
-    <table class="innerTable">
-      <tr>
-        <th>Område</th>
-        <td>${areaName}</td>
-      </tr>
-      <tr>
-        <th>${indexTitle}</th>
-        <td>${index}</td>
-      </tr>
-    </table>
-  `;
-
-  tooltip
-    .html(tooltipText)
-    .style("background-color", color)
-    .style("color", "white")
-    .style("left", `${tooltipXPostiton}px`)
-    .style("top", `${tooltipYPostiton}px`)
-    .transition()
-    .duration(200)
-    .style("opacity", 0.9);
-};
-
-const getToolTipPosition = () => {
-  const posy = event.pageY;
-  const posx = event.pageX;
-
-  const tooltipXPostiton = posx > 240 ? posx - 100 : posx + 10;
-  const tooltipYPostiton = posy + 10;
-
-  return {
-    tooltipXPostiton,
-    tooltipYPostiton,
-  };
-};
-
-const createTooltip = (svgContainer) =>
-  svgContainer
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0)
-    .style("position", "absolute")
-    .style("border", "1px solid white")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
-    .style("pointer-events", "none");
 
 const createTitle = (svg, year, mapTitle) => {
   svg
