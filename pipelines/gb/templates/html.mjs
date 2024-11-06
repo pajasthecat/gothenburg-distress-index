@@ -1,4 +1,4 @@
-export const htmlTemplate = (map, indexTitle) => `
+export const htmlTemplate = (map, indexTitle, mimhTitle) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,6 +14,8 @@ export const htmlTemplate = (map, indexTitle) => `
     <div class="mapContainer">
       <div id="svg"> ${map}</div>
     </div>
+
+    <br />
 
     <form id="searchTextForm">
       <div class="inputContainer">
@@ -33,6 +35,7 @@ export const htmlTemplate = (map, indexTitle) => `
           <th id="table-header-area" class="headerSortUp">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexTitle}</th>
+          <th id="table-header-mimh">${mimhTitle}</th>
         </tr>
       </table>
     </div>

@@ -4,7 +4,10 @@ import { calculateZScore, getMeanAndStd } from "../../src/normalizers.mjs";
 import { createPrimaryAreaMap } from "../../src/generators/mapGenerator.mjs";
 import { round } from "../../src/helpers.mjs";
 import { config } from "./configuration.mjs";
-const { indexTitle, scales } = config;
+const {
+  titles: { indexTitle },
+  scales,
+} = config;
 
 export const convert = (data) =>
   Object.keys(data).reduce((agg, year) => {
@@ -20,7 +23,11 @@ export const convert = (data) =>
       .map(calculateIndex)
       .map(calculateQuartile);
 
-    const map = createPrimaryAreaMap(index, {year, mapTitle:"Primärområden", indexTitle: indexTitle});
+    const map = createPrimaryAreaMap(index, {
+      year,
+      mapTitle: "Primärområden",
+      indexTitle: indexTitle,
+    });
 
     return { ...agg, [year]: { index, map } };
   }, {});
@@ -74,7 +81,7 @@ const calculateIndex = (dataByArea) => {
     ownershipRateInverted +
     overCrowdingRate;
 
-    const roundedIndex = round(result);
+  const roundedIndex = round(result);
 
   return {
     ...dataByArea,
@@ -94,12 +101,13 @@ const calculateIndexMembers = (cityMedianIncome, dataByArea) => {
   const ownershipRate = calculateOwnershipRate(dataByArea);
   const overCrowdingRate = calculateOverCrowdedRate(dataByArea);
 
+  const roundedmimh = round(gothenburgMedianIncomeToMedianHousePrice);
   return {
     ...dataByArea,
     index: {
       raw: {
         netMigration,
-        gothenburgMedianIncomeToMedianHousePrice,
+        gothenburgMedianIncomeToMedianHousePrice: roundedmimh,
         primaryAreaMedianIncomeToMedianHousePrice,
         ownershipRate,
         overCrowdingRate,
@@ -109,7 +117,7 @@ const calculateIndexMembers = (cityMedianIncome, dataByArea) => {
 };
 
 const calculateOverCrowdedRate = (dataByArea) => {
-  const { overCrowdingRate: overCrowding, area } = dataByArea;
+  const { overCrowdingRate: overCrowding } = dataByArea;
 
   if (!overCrowding) return 0;
 

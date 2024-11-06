@@ -42,6 +42,11 @@ h2 {
   font-weight: inherit;
 }
 
+.tableContainer{
+  height: 300px; 
+  overflow: auto; 
+}
+
 table {
   text-align: left;
   margin: auto;
@@ -57,6 +62,8 @@ th {
   font-style: normal;
   font-size: small;
   text-align: center;
+  width: 90px;
+  overflow: hidden;
 }
 
 th {
