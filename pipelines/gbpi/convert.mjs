@@ -6,6 +6,7 @@ import { round } from "../../src/helpers.mjs";
 import { config } from "./configuration.mjs";
 const {
   titles: { indexShortTitle },
+  classification,
   scales,
 } = config;
 
@@ -50,15 +51,17 @@ const calculateQuartile = (primaryArea, _, array) => {
 };
 
 const getIndexClassification = (quartile) => {
-  if (quartile <= 0.1)
-    return { status: "Prisvärt", color: "#4CAF50", sorting: 1 };
-  if (quartile <= 0.25)
-    return { status: "Överkomligt", color: "#8BC34A", sorting: 2 };
-  if (quartile <= 0.5)
-    return { status: "Neutralt", color: "#FFEB3B", sorting: 3 };
-  if (quartile <= 0.75) return { status: "Dyrt", color: "#FF9800", sorting: 4 };
-  else return { status: "Väldigt dyrt", color: "#F44336", sorting: 5 };
+  if (quartile <= 0.1) return getClassificationForLevel(1);
+  if (quartile <= 0.25) return getClassificationForLevel(2);
+  if (quartile <= 0.5) return getClassificationForLevel(3);
+  if (quartile <= 0.75) return getClassificationForLevel(4);
+  else return getClassificationForLevel(5);
 };
+
+const getClassificationForLevel = (sorting) => ({
+  ...classification[sorting],
+  sorting,
+});
 
 const calculateIndex = (dataByArea) => {
   const { index } = dataByArea;

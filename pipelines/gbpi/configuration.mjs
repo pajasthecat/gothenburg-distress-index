@@ -14,4 +14,26 @@ export const config = {
     netMigration: 0.15,
     overCrowdingRate: 0.15,
   },
+  classification: {
+    1: {
+      status: "Lätttillgängligt",
+      color: "#4CAF50",
+    },
+    2: {
+      status: "Överkomligt",
+      color: "#8BC34A",
+    },
+    3: {
+      status: "Neutralt",
+      color: "#FFEB3B",
+    },
+    4: {
+      status: "Svårtillgängligt",
+      color: "#FF9800",
+    },
+    5: {
+      status: "Väldigt svårtillgängligt",
+      color: "#F44336",
+    },
+  },
 };
