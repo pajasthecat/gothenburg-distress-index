@@ -3,8 +3,8 @@ name: Deploy
 on:
   push:
     branches: ["main"]
-  paths:
-    - public/gbpi/**
+    paths:
+      - "public/iesg/**"
 
 jobs:
   deploy:

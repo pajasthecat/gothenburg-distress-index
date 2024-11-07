@@ -3,9 +3,8 @@ name: Deploy
 on:
   push:
     branches: ["main"]
-  paths:
-    - public/gbpi/**
-
+    paths:
+      - "public/gbpi/**"
 jobs:
   deploy:
     runs-on: ubuntu-latest
