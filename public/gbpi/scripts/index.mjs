@@ -5,7 +5,6 @@ import {
   setSearchEventListeners,
   setSortingEventListeners,
   setUpAllPrimaryAreas,
-  mimhTooltip,
 } from "./table.mjs";
 import { tooltip, initializeZoom } from "./map.mjs";
 
@@ -18,5 +17,3 @@ setUpAllPrimaryAreas(data);
 setSortingEventListeners();
 
 setSearchEventListeners(areas, data);
-
-mimhTooltip();
