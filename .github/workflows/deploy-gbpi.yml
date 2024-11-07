@@ -21,7 +21,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: "c998444368535e9100cd4e83bb76fb41"
-          projectName: "iesg"
-          directory: "public/iesg"
+          projectName: "gbpi"
+          directory: "public/gbpi"
           wranglerVersion: "3"
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
