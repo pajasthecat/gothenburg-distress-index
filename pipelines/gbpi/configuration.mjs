@@ -28,11 +28,11 @@ export const config = {
       color: "#FFEB3B",
     },
     4: {
-      status: "Svårtillgängligt",
+      status: "Svåröverkomligt",
       color: "#FF9800",
     },
     5: {
-      status: "Väldigt svårtillgängligt",
+      status: "Svårtillgängligt",
       color: "#F44336",
     },
   },
