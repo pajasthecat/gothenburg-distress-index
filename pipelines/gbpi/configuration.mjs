@@ -4,7 +4,7 @@ export const config = {
     fetch: false,
   },
   titles: {
-    mimhTitle: "Medianpris / medianlön",
+    mimhTitle: "MP/ML kvot",
     indexTitle: "Göteborgs Boendeprisindex",
     indexShortTitle: "GBPI",
   },

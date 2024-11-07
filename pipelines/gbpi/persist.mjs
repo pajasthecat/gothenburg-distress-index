@@ -1,13 +1,11 @@
 import { htmlTemplate } from "./templates/html.mjs";
 import { config } from "./configuration.mjs";
-const {
-  titles: { indexTitle, mimhTitle, indexShortTitle },
-} = config;
+const { titles } = config;
 
 import { writeFileSync } from "fs";
 
 export const persist = ({ index, map }) => {
-  const html = htmlTemplate(map, indexTitle, mimhTitle, indexShortTitle);
+  const html = htmlTemplate(map, titles);
 
   const dataToPersist = index.map((_) => {
     const {

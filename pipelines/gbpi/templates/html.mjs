@@ -1,11 +1,14 @@
-export const htmlTemplate = (map, indexTitle, indexShortTitle, mimhTitle) => `
+export const htmlTemplate = (
+  map,
+  { indexTitle, indexShortTitle, mimhTitle }
+) => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Göteborgs Boendebarometer</title>
-    <link rel="icon" type="image/png" href="images/bar-graph.png" />
+    <link rel="icon" type="image/png" href="images/home.png" />
     <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
@@ -29,13 +32,13 @@ export const htmlTemplate = (map, indexTitle, indexShortTitle, mimhTitle) => `
 
     <br />
 
-    <div style="height: 300px; overflow: auto">
+    <div class="tableContainer">
       <table id="allPrimaryAreas">
         <tr>
           <th id="table-header-area" class="headerSortUp">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexShortTitle}</th>
-          <th id="table-header-mimh">${mimhTitle}</th>
+          <th id="table-header-mimh">${mimhTitle} div <span id="mimhTooltip" class="mimhTooltip">This is my tooltip</span> </th>
         </tr>
       </table>
     </div>
@@ -61,12 +64,7 @@ export const htmlTemplate = (map, indexTitle, indexShortTitle, mimhTitle) => `
         </div>
 
         <div class="footerTextContainer">
-          <a
-            href="https://www.flaticon.com/free-icons/bar-chart"
-            title="bar chart icons"
-            target="_blank"
-            >Bar chart icons created by Pixel perfect - Flaticon</a
-          >
+          <a href="https://www.flaticon.com/free-icons/living" title="living icons">Living icons created by iconixar - Flaticon</a>
         </div>
 
         <div class="footerTextContainer">
