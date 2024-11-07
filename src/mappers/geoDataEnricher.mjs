@@ -22,7 +22,7 @@ export const addGbDataToGeoData = (indexData, geoData) => {
 
     const {
       value,
-      classification: { status, color },
+      classification: { status, color, sorting },
     } = index;
     return {
       ...feat,
@@ -31,6 +31,7 @@ export const addGbDataToGeoData = (indexData, geoData) => {
         Index: value,
         Name: name,
         Status: status,
+        Sorting: sorting,
       },
     };
   });
