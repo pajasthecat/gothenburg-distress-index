@@ -11,6 +11,70 @@ export const getMedianIncome = async () => {
   return data;
 };
 
+export const getPropertyOwnershipRate = async (years) => {
+  const response = await fetchData(
+    configuration.houseOwnershipRateYears.url,
+    configuration.houseOwnershipRateYears.body(years)
+  );
+
+  const data = response.data.reduce((agg, response) => {
+    const [area, _, type, year] = response.key;
+    const value = parseInt(response.values[0]);
+
+    const rent = type === "Hyresrätt" ? value : 0;
+    const own = type === "Bostadsrätt" || type === "Äganderätt" ? value : 0;
+    const other = type === "Uppgift saknas" ? value : 0;
+
+    const chosenYear = agg[year];
+
+    const data = { area, propertyOwnershipRate: { rent, own, other } };
+
+    if (!chosenYear) return { [year]: [data] };
+
+    const index = chosenYear.findIndex((_) => _.area === area);
+
+    if (index === -1) {
+      return { [year]: [...chosenYear, data] };
+    }
+
+    chosenYear[index] = {
+      area,
+      propertyOwnershipRate: {
+        rent: chosenYear[index].propertyOwnershipRate.rent + rent,
+        other: chosenYear[index].propertyOwnershipRate.other + other,
+        own: chosenYear[index].propertyOwnershipRate.own + own,
+      },
+    };
+
+    return { [year]: [...chosenYear] };
+  }, {});
+
+  return data;
+};
+
+export const getMedianIncomes = async (years) => {
+  const response = await fetchData(
+    configuration.medianIncomeYears.url,
+    configuration.medianIncomeYears.body(years)
+  );
+
+  const data = response.data
+    .map((d) => mapResponseByYear(d, "medianIncome"))
+    .reduce((agg, current) => {
+      const { area, medianIncome, year } = current;
+
+      const data = { area, medianIncome };
+
+      const choosenYear = agg[year];
+
+      if (!choosenYear) return { [year]: [data] };
+
+      return { [year]: [...choosenYear, data] };
+    }, {});
+
+  return data;
+};
+
 export const getGovernmentAssistanceFigures = async () => {
   const response = await fetchData(
     configuration.welfareRecipients.url,
@@ -126,4 +190,12 @@ const mapResponse = (data, valueName) => {
   const value = parseInt(data.values[0]);
 
   return { area, [valueName]: value };
+};
+
+const mapResponseByYear = (data, valueName) => {
+  const area = data.key[0];
+  const year = data.key[5];
+  const value = parseInt(data.values[0]);
+
+  return { area, [valueName]: value, year };
 };

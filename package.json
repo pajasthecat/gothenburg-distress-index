@@ -10,8 +10,11 @@
     "simple-statistics": "^7.8.5"
   },
   "scripts": {
-    "dev": "node dev-server.js",
-    "pipeline:run": "node pipeline/index.mjs",
-    "start": "yarn pipeline:run && yarn dev"
+    "dev:iesg": "node dev-server.js public/iesg",
+    "dev:gbpi": "node dev-server.js public/gbpi",
+    "pipeline:run:iesg": "node pipelines/iesg/index.mjs",
+    "pipeline:run:gbpi": "node pipelines/gbpi/index.mjs",
+    "start:iesg": "yarn pipeline:run:iesg && yarn dev:iesg",
+    "start:gbpi": "yarn pipeline:run:gbpi && yarn dev:gbpi"
   }
 }

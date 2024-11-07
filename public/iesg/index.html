@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IESG - Hur mår ditt område?</title>
+    <link rel="icon" type="image/png" href="images/bar-graph.png" />
+    <link rel="stylesheet" href="styles/index.css" />
+    <!-- Primary Meta Tags -->
+    <title>IESG - Index för Ekonomisk Sårbarhet i Göteborg </title>
+    <meta name="title" content="IESG - Index för Ekonomisk Sårbarhet i Göteborg " />
+    <meta name="description" content="IESG visar stadens socioekonomiska läge, från "utsatt" till "blomstrande" – för insikt och ökad förståelse." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://iesg.pages.dev/" />
+    <meta property="og:title" content="IESG - Index för Ekonomisk Sårbarhet i Göteborg " />
+    <meta property="og:description" content="IESG visar stadens socioekonomiska läge, från "utsatt" till "blomstrande" – för insikt och ökad förståelse." />
+    <meta property="og:image" content="https://iesg.pages.dev/images/map.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://iesg.pages.dev/" />
+    <meta property="twitter:title" content="IESG - Index för Ekonomisk Sårbarhet i Göteborg " />
+    <meta property="twitter:description" content="IESG visar stadens socioekonomiska läge, från "utsatt" till "blomstrande" – för insikt och ökad förståelse." />
+    <meta property="twitter:image" ontent="https://iesg.pages.dev/images/map.png" />
+
+    <!-- Meta Tags Generated with https://metatags.io -->
+  </head>
+  <body>
+    <h1>Index för Ekonomisk Sårbarhet i Göteborg (IESG)</h1>
+    <p>
+      På den här sidan presenteras en översikt över de ekonomiska förhållandena
+      i Göteborgs primärområden. Indexet bygger på faktorer som inkomst,
+      beroende av ekonomiskt bistånd, arbetslöshet och gymnasiebehörighet, och
+      ger en indikation på områdenas ekonomiska sårbarhet eller välmående. Varje
+      område har tilldelats ett indexvärde och en klassificering som sträcker
+      sig från "Utsatt" till "Blomstrande".
+    </p>
+    <p>
+      Datan har samlats in från Göteborgs stads statistikdatabas. För detaljer
+      om indexet och för att se hur jag räknat,
+      <a
+        href="https://github.com/pajasthecat/gothenburg-distress-index"
+        target="_blank"
+        >kolla här</a
+      >.
+    </p>
+
+    <h2>Översikt över ESGI 2024</h2>
+
+    <p>
+      För en visuell presentation kan du se indexet på en karta över Göteborg,
+      där varje område är färgkodat efter sitt ekonomiska indexvärde. Genom att
+      hovra över kartan kan du se mer detaljerad information för varje område.
+    </p>
+
+    <div class="mapContainer">
+      <div id="svg"></div>
+    </div>
+
+    <p>
+      Tabellen nedan listar alla primärområden med deras indexvärden och
+      klassificeringar. Du kan enkelt söka efter specifika områden, se vilket
+      område din adress tillhör, eller sortera tabellen genom att klicka på
+      rubrikerna i respektive kolumn.
+    </p>
+
+    <form id="searchTextForm">
+      <div class="inputContainer">
+        <input
+          type="search"
+          id="searchText"
+          placeholder="Sök på din adress och område"
+        />
+      </div>
+    </form>
+
+    <br />
+
+    <div style="height: 300px; overflow: auto">
+      <table id="allPrimaryAreas">
+        <tr>
+          <th id="table-header-area" class="headerSortUp">Område</th>
+          <th id="table-header-status">Status</th>
+          <th id="table-header-index">IESG</th>
+        </tr>
+      </table>
+    </div>
+
+    <footer>
+      <div class="footerContainer">
+        <div class="footerImageContainer">
+          <a href="mailto: henrik.forsberg1990@gmail.com">
+            <img src="images\email.png" alt="email icon"
+          /></a>
+          <a
+            href="https://github.com/pajasthecat/gothenburg-distress-index"
+            ,
+            target="_blank"
+          >
+            <img src="images\github.png" alt="github icon" />
+          </a>
+        </div>
+        <div class="footerTextContainer">
+          <div></div>
+          <p>No tracking. No cookies. No visit logs.</p>
+          <div></div>
+        </div>
+
+        <div class="footerTextContainer">
+          <a
+            href="https://www.flaticon.com/free-icons/bar-chart"
+            title="bar chart icons"
+            target="_blank"
+            >Bar chart icons created by Pixel perfect - Flaticon</a
+          >
+        </div>
+
+        <div class="footerTextContainer">
+          <div></div>
+          <p>©2024 Henrik Forsberg.</p>
+          <div></div>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="./scripts/index.mjs"></script>
+  </body>
+</html>
