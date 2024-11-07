@@ -38,7 +38,7 @@ export const htmlTemplate = (
           <th id="table-header-area" class="headerSortUp">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexShortTitle}</th>
-          <th id="table-header-mimh">${mimhTitle} div <span id="mimhTooltip" class="mimhTooltip">This is my tooltip</span> </th>
+          <th id="table-header-mimh">${mimhTitle} </th>
         </tr>
       </table>
     </div>
