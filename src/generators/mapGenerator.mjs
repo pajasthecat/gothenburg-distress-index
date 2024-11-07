@@ -6,8 +6,7 @@ import { JSDOM } from "jsdom";
 import { addGbDataToGeoData } from "../mappers/geoDataEnricher.mjs";
 
 const drawMap = (mapEntries, labels) => {
-
-  const  {year, mapTitle, indexTitle} = labels
+  const { year, mapTitle, indexShortTitle } = labels;
   const domObj = new JSDOM(`<!DOCTYPE html><body><div id="svg"></div></body>`);
 
   let svgContainer = select(domObj.window.document.getElementById("svg"));
@@ -34,13 +33,13 @@ const drawMap = (mapEntries, labels) => {
     .enter()
     .append("path")
     .attr("d", path)
-    .attr("data-color", d => d.properties["Color"])
-    .attr("data-name", d => d.properties["Name"])    
-    .attr("data-index", d => d.properties["Index"])
-    .attr("data-index-title", () => indexTitle)
+    .attr("data-color", (d) => d.properties["Color"])
+    .attr("data-name", (d) => d.properties["Name"])
+    .attr("data-index", (d) => d.properties["Index"])
+    .attr("data-index-title", () => indexShortTitle)
     .style("fill", (d) => d.properties["Color"])
     .style("stroke", "white")
-    .style("stroke-width", "1px")
+    .style("stroke-width", "1px");
 
   createTitle(svg, year, mapTitle);
 
@@ -48,7 +47,6 @@ const drawMap = (mapEntries, labels) => {
 
   return svgContainer.html();
 };
-
 
 const createTitle = (svg, year, mapTitle) => {
   svg

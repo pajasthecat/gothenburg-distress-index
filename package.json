@@ -10,11 +10,11 @@
     "simple-statistics": "^7.8.5"
   },
   "scripts": {
-    "dev:iesg": "node dev-server.js public",
-    "dev:gb": "node dev-server.js gb/public",
-    "pipeline:run": "node pipelines/iesg/index.mjs",
-    "pipeline:gb:run": "node pipelines/gb/index.mjs",
-    "start": "yarn pipeline:run && yarn dev:iesg",
-    "start:gb": "yarn pipeline:gb:run && yarn dev:gb"
+    "dev:iesg": "node dev-server.js public/iesg",
+    "dev:gbpi": "node dev-server.js public/gbpi",
+    "pipeline:run:iesg": "node pipelines/iesg/index.mjs",
+    "pipeline:run:gbpi": "node pipelines/gbpi/index.mjs",
+    "start:iesg": "yarn pipeline:run:iesg && yarn dev:iesg",
+    "start:gbpi": "yarn pipeline:run:gbpi && yarn dev:gbpi"
   }
 }
