@@ -1,9 +1,10 @@
 # Gothenburg based indexes
 
 ## Indexes
+
 [Index för Ekonomisk Sårbarhet i Göteborg (IESG)](./docs/iesg.md)
 
-[Göteborgs Boendebarometer](./docs/gb.md)
+[Göteborgs Boendeprisindex](./docs/gbpi.md)
 
 ## Map
 

@@ -17,23 +17,23 @@ export const config = {
   classification: {
     1: {
       status: "Lätttillgängligt",
-      color: "#4CAF50",
+      color: "#66A182",
     },
     2: {
       status: "Överkomligt",
-      color: "#8BC34A",
+      color: "#4B8F72",
     },
     3: {
       status: "Neutralt",
-      color: "#FFEB3B",
+      color: "#3B7D63",
     },
     4: {
       status: "Svåröverkomligt",
-      color: "#FF9800",
+      color: "#2C6B54",
     },
     5: {
       status: "Svårtillgängligt",
-      color: "#F44336",
+      color: "#1C4D3B",
     },
   },
 };
