@@ -365,4 +365,18 @@ export const configuration = {
       },
     }),
   },
+  boplats: {
+    tables: [
+      "Angered",
+      "Askim-Frölunda-Högsbo",
+      "Centrum",
+      "Lundby",
+      "Majorna-Linné",
+      "Norra Hisingen",
+      "Västra Göteborg",
+      "Västa Hisningen",
+      "Örgryte-Härlanda",
+      "Östra Göteborg",
+    ],
+  },
 };

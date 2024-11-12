@@ -1,6 +1,13 @@
 export const htmlTemplate = (
   map,
-  { indexTitle, indexShortTitle, mimhTitle }
+  {
+    indexTitle,
+    indexShortTitle,
+    mimhTitle,
+    ownershipRateTitle,
+    medianQueueTimeTitle,
+    medianRentTitle,
+  }
 ) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -35,10 +42,18 @@ export const htmlTemplate = (
     <div class="tableContainer">
       <table id="allPrimaryAreas">
         <tr>
-          <th id="table-header-area" class="headerSortUp">Område</th>
+          <th id="table-header-area" class="activeSort">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexShortTitle}</th>
-          <th id="table-header-mimh">${mimhTitle} </th>
+          <th id="table-header-mimh">
+          <div class="tableTooltip">
+            ${mimhTitle}
+              <span>Kvot mellan medianfastighetspris (MP) och medianinkomst (MI)</span>
+            </div>  
+          </th>
+          <th id="table-header-medianQueueTime">${medianQueueTimeTitle} </th>
+          <th id="table-header-ownershipRate">${ownershipRateTitle} </th>
+          <th id="table-header-medianRent">${medianRentTitle} </th>
         </tr>
       </table>
     </div>

@@ -177,23 +177,35 @@ path {
   font-size: 12px;
 }
 
-.headerSortDown:after,
-.headerSortUp:after {
-  content: " ";
-  position: relative;
-  left: 10px;
-  border: 7px outset transparent;
+.activeSort {
+  background-color: #e0e0e0;
+  transition: background-color 0.3s ease;
 }
 
-.headerSortDown:after {
-  top: 10px;
-  border-top-color: black;
+.tableTooltip{
+  border-bottom: 1px dotted black;
 }
 
-.headerSortUp:after {
-  bottom: 10px;
-  border-bottom-color: black;
+.tableTooltip span {
+  display: none;
+  visibility: hidden; 
+  opacity: 0; 
+  font-size: smaller;
 }
+
+.tableTooltip:hover {
+  border-bottom: none;
+  visibility: hidden;
+}
+
+.tableTooltip:hover span {
+  display: inline-block;
+  border-bottom: none;
+  visibility: visible; 
+  opacity: 1; 
+  text-align: left;
+}
+
 
 @media screen and (max-width: 800px) {
   body {
