@@ -1,9 +1,11 @@
 import { load } from "cheerio";
 
 import { configuration } from "./configuration.js";
-import { writeCache, readCache } from "./cache/cache.mjs";
+import { readCache } from "./cache/cache.mjs";
 
 export const getMedianRent = async () => {
+  console.log("Getting data from Qasa");
+
   const {
     boplats: { tables },
   } = configuration;
@@ -13,6 +15,8 @@ export const getMedianRent = async () => {
   const cachedProps = readCache(cacheName);
 
   if (cachedProps) return cachedProps;
+
+  console.log("Done getting data from Qasa");
 
   return {
     Angered: [

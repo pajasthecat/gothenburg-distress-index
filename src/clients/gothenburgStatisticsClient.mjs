@@ -40,12 +40,16 @@ export const getMedianIncome = async () => {
 };
 
 export const getMedianIncomes = async (years) => {
-  const response = await fetchData(
-    configuration.medianIncomeYears.url,
-    configuration.medianIncomeYears.body(years)
-  );
+  try {
+    const response = await fetchData(
+      configuration.medianIncomeYears.url,
+      configuration.medianIncomeYears.body(years)
+    );
 
-  return mapMedianIncomes(response);
+    return mapMedianIncomes(response);
+  } catch (error) {
+    console.log("Error when getting medianIncomes", { error });
+  }
 };
 
 export const getGovernmentAssistanceFigures = async () => {

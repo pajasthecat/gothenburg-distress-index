@@ -4,6 +4,8 @@ import { configuration } from "./configuration.js";
 import { writeCache, readCache } from "./cache/cache.mjs";
 
 export const getQueueingTimeInYears = async () => {
+  console.log("Getting data from Boplats");
+
   const {
     boplats: { tables },
   } = configuration;
@@ -12,11 +14,16 @@ export const getQueueingTimeInYears = async () => {
 
   const cachedProps = readCache(cacheName);
 
-  if (cachedProps) return cachedProps;
+  if (cachedProps) {
+    console.log("Done getting cached data from Boplats");
+
+    return cachedProps;
+  }
 
   const response = await fetch("https://boplats.se/tipshjalp/statistik");
 
   const markup = await response.text();
+
   const $ = load(markup);
 
   const h3 = $("h3").filter((_, el) => $(el).text().trim() === "Tabeller");
@@ -64,6 +71,8 @@ export const getQueueingTimeInYears = async () => {
   );
 
   writeCache(pickedTables, cacheName);
+
+  console.log("Done getting data from Boplats");
 
   return pickedTables;
 };
