@@ -1,5 +1,7 @@
 import { htmlTemplate } from "./templates/html.mjs";
 import { config } from "./configuration.mjs";
+import { getIndexValue } from "../../src/helpers.mjs";
+
 const { titles } = config;
 
 import { writeFileSync } from "fs";
@@ -11,7 +13,12 @@ export const persist = ({ index, map }) => {
     const {
       area,
       index: {
-        raw: { gothenburgMedianIncomeToMedianHousePrice },
+        raw: {
+          gothenburgMedianIncomeToMedianHousePrice,
+          medianQueueTime,
+          ownershipRate,
+          medianRent,
+        },
         value,
         classification: { status, color, sorting },
       },
@@ -24,6 +31,9 @@ export const persist = ({ index, map }) => {
       area,
       sorting,
       mimh: gothenburgMedianIncomeToMedianHousePrice,
+      medianQueueTime,
+      ownershipRate: getIndexValue(ownershipRate),
+      medianRent,
     };
   });
 

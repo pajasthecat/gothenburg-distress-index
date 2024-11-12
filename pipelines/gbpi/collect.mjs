@@ -4,6 +4,7 @@ import {  getMedianIncomes, getPropertyOwnershipRate, getMovingData, getPopulati
 import { toPriceByYear } from "../../src/mappers/booliMappers.mjs";
 import { readCache, writeCache } from "../../src/clients/cache/cache.mjs";
 import {  normalizeString } from "../../src/normalizers.mjs";
+import { getQueueTimeForPrimaryAreas, getMedianRentForPrimaryAreas } from "../../src/services/rentalInformationService.mjs";
 
 import { config } from "./configuration.mjs";
 import primaryAreas from "../../data/primary-area.json" with {type:"json"};
@@ -41,46 +42,82 @@ const mergeDataByYear = ({
   propertyOwnershipRates, 
   movingPatterns, 
   populations,
-  overCrowdingRates}) => Object.keys(medianIncomes).reduce((aggregate, year) => {  
+  overCrowdingRates,
+  queueTimes,
+  medianRents}) => Object.keys(medianIncomes).reduce((aggregate, year) => {  
   const primaryArea = medianIncomes[year].reduce((agg, data) => {
     const {area, medianIncome} = data;    
 
     if(area === "Göteborg") return agg;
 
-    const compare = m => normalizeString(m.area) === normalizeString(area) 
+    const compareArea = m => normalizeString(m.area) === normalizeString(area);
 
-    const propertyPricesData = propertyPrices[year]?.find(compare)?.propertyPrices;
-    const propertyOwnershipRate = propertyOwnershipRates[year]?.find(compare)?.propertyOwnershipRate
-    const movingPattern = movingPatterns[year]?.find(compare)?.movingPattern
-    const population = populations[year]?.find(compare)?.population
-    const overCrowdingRate = overCrowdingRates[year]?.find(compare)?.overCrowdingRate
+    const getByYearAndArea = (data, year) => data[year]?.find(compareArea);      
+
+    const propertyPricesData = propertyPrices[year]?.find(compareArea)?.propertyPrices;
+    const propertyOwnershipRate = propertyOwnershipRates[year]?.find(compareArea)?.propertyOwnershipRate
+    const movingPattern = movingPatterns[year]?.find(compareArea)?.movingPattern
+    const population = populations[year]?.find(compareArea)?.population
+    const overCrowdingRate = overCrowdingRates[year]?.find(compareArea)?.overCrowdingRate
+    const queueTime = queueTimes[year]?.find(compareArea)?.queueTime;
+    const medianRent = getByYearAndArea(medianRents, year)?.medianRent;  
 
    if(!medianIncome) {    
     return agg;
    }
 
-    return [...agg, {area, propertyPrices: propertyPricesData, medianIncome, propertyOwnershipRate, movingPattern, population, overCrowdingRate}]
+    return [
+      ...agg, {
+        area, 
+        propertyPrices: propertyPricesData, 
+        medianIncome, 
+        propertyOwnershipRate, 
+        movingPattern, 
+        population, 
+        overCrowdingRate, 
+        queueTime,
+        medianRent}]
   }, []);
 
   if(!primaryArea || primaryArea.length === 0) return aggregate;
 
-  return {...aggregate, [year]: {primaryArea, gothenburg: {
+  return {...aggregate, [year]: {
+    primaryArea, 
+    gothenburg: {
     medianIncome: medianIncomes[year].slice(-1)[0].medianIncome,
   },}}
 },{});
 
 export const collect = async () => {
-  const { years } = config;
+  const { years, areaMapping } = config;
 
-  const [propertyPrices, medianIncomes, propertyOwnershipRates, movingPatterns, populations, overCrowdingRates] = await Promise.all([
+  const [
+    propertyPrices, 
+    medianIncomes, 
+    propertyOwnershipRates, 
+    movingPatterns, 
+    populations, 
+    overCrowdingRates, 
+    queueTimes, 
+    medianRents] = await Promise.all([
     getPropertyPricesPerYear(years), 
     getMedianIncomes(years), 
     getPropertyOwnershipRate(years), 
     getMovingData(years),
     getPopulationByYear(years),
-    getOverCrowdingRate(years)]);  
+    getOverCrowdingRate(years),
+    getQueueTimeForPrimaryAreas(years, areaMapping),
+    getMedianRentForPrimaryAreas(years, areaMapping)]);          
 
-  const mergedData = mergeDataByYear({propertyPrices, medianIncomes, propertyOwnershipRates, movingPatterns, populations, overCrowdingRates});  
+  const mergedData = mergeDataByYear({
+    propertyPrices, 
+    medianIncomes, 
+    propertyOwnershipRates, 
+    movingPatterns, 
+    populations, 
+    overCrowdingRates, 
+    queueTimes,
+    medianRents});  
   
   return mergedData;
 };

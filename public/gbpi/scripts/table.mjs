@@ -30,8 +30,7 @@ const setSortArrow = (table, index) => {
       th.className = null;
       return;
     }
-    const className =
-      th.className === "headerSortDown" ? "headerSortUp" : "headerSortDown";
+    const className = "activeSort";
 
     th.className = className;
   });
@@ -142,17 +141,33 @@ const addRow = (data, allPrimaryAreas) =>
     allPrimaryAreas.innerHTML += row;
   });
 
-const getRow = ({ area, status, index, color, mimh }) =>
+const getRow = ({
+  area,
+  status,
+  index,
+  color,
+  mimh,
+  ownershipRate,
+  medianQueueTime,
+  medianRent,
+}) =>
   `
   <tr style="background-color: ${color}; color: white">
        <td>${area}</td>
        <td>${status}</td>
        <td>${index}</td>
        <td>${mimh}</td>
+       <td>${medianQueueTime}</td>
+       <td>${ownershipRate}</td>
+       <td>${medianRent}</td>
      </tr>
  `;
 
 export const setSortingEventListeners = () => {
+  document
+    .getElementById("table-header-area")
+    .addEventListener("click", () => sortTable(0, "area"));
+
   document
     .getElementById("table-header-status")
     .addEventListener("click", () => sortTable(1, "string"));
@@ -162,12 +177,20 @@ export const setSortingEventListeners = () => {
     .addEventListener("click", () => sortTable(2, "number"));
 
   document
-    .getElementById("table-header-area")
-    .addEventListener("click", () => sortTable(0, "area"));
-
-  document
     .getElementById("table-header-mimh")
     .addEventListener("click", () => sortTable(3, "number"));
+
+  document
+    .getElementById("table-header-medianQueueTime")
+    .addEventListener("click", () => sortTable(4, "number"));
+
+  document
+    .getElementById("table-header-ownershipRate")
+    .addEventListener("click", () => sortTable(5, "number"));
+
+  document
+    .getElementById("table-header-medianRent")
+    .addEventListener("click", () => sortTable(6, "number"));
 };
 
 export const setSearchEventListeners = (areas, data) =>

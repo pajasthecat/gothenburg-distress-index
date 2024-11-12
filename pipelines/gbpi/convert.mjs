@@ -68,21 +68,20 @@ const calculateIndex = (dataByArea) => {
 
   const {
     scaled: {
-      netMigration,
       gothenburgMedianIncomeToMedianHousePrice,
       ownershipRate,
-      overCrowdingRate,
+      medianQueueTime,
+      medianRent,
     },
   } = index;
 
-  const netMigrationInverted = 1 - netMigration;
   const ownershipRateInverted = 1 - ownershipRate;
 
   const result =
-    netMigrationInverted +
     gothenburgMedianIncomeToMedianHousePrice +
     ownershipRateInverted +
-    overCrowdingRate;
+    medianQueueTime +
+    medianRent;
 
   const roundedIndex = round(result);
 
@@ -103,6 +102,8 @@ const calculateIndexMembers = (cityMedianIncome, dataByArea) => {
   const netMigration = calculateNetMigration(dataByArea);
   const ownershipRate = calculateOwnershipRate(dataByArea);
   const overCrowdingRate = calculateOverCrowdedRate(dataByArea);
+  const medianQueueTime = calculateMedianQueueTime(dataByArea);
+  const medianRent = calculateMedianRent(dataByArea);
 
   const roundedmimh = round(gothenburgMedianIncomeToMedianHousePrice);
   return {
@@ -114,9 +115,42 @@ const calculateIndexMembers = (cityMedianIncome, dataByArea) => {
         primaryAreaMedianIncomeToMedianHousePrice,
         ownershipRate,
         overCrowdingRate,
+        medianQueueTime,
+        medianRent,
       },
     },
   };
+};
+
+const calculateMedianRent = ({ medianRent }) => {
+  const rentPerSqm = medianRent.map((_) => _.rentPerSqm);
+
+  return median(rentPerSqm);
+};
+
+const calculateMedianQueueTime = ({ queueTime, area }) => {
+  const yearArray = queueTime
+    ?.reduce((agg, curr) => {
+      const key = Object.keys(curr)[0];
+      if (key === "Totalt") return agg;
+      const years = key.split("-");
+
+      const year = (parseInt(years[0]) + parseInt(years[1])) / 2;
+      const count = curr[key];
+
+      const res = new Array(count).fill(year).map((_) => _);
+
+      return [...agg, res];
+    }, [])
+    ?.flat();
+
+  try {
+    const medianQueueTime = median(yearArray);
+    return medianQueueTime;
+  } catch (error) {
+    console.log("Error when trying to get median years", { error, area });
+    return 0;
+  }
 };
 
 const calculateOverCrowdedRate = (dataByArea) => {
@@ -191,15 +225,26 @@ const normalizeParameters = (dataByYear) => {
     netMigrationStat,
     ownershipRatesStat,
     overCrowdingRateStat,
+    medianQueueTimeStat,
+    medianRentStat,
   } = dataByYear.reduce((agg, current, index, array) => {
     if (index + 1 === array.length) {
-      const { mimhs, overCrowdingRates, netMigrations, ownershipRates } = agg;
+      const {
+        mimhs,
+        overCrowdingRates,
+        netMigrations,
+        ownershipRates,
+        medianQueueTime,
+        medianRent,
+      } = agg;
 
       return {
         mimhStats: getMeanAndStd(mimhs),
         netMigrationStat: getMeanAndStd(netMigrations),
         ownershipRatesStat: getMeanAndStd(ownershipRates),
         overCrowdingRateStat: getMeanAndStd(overCrowdingRates),
+        medianQueueTimeStat: getMeanAndStd(medianQueueTime),
+        medianRentStat: getMeanAndStd(medianRent),
       };
     }
 
@@ -210,6 +255,8 @@ const normalizeParameters = (dataByYear) => {
           gothenburgMedianIncomeToMedianHousePrice,
           ownershipRate,
           overCrowdingRate,
+          medianQueueTime,
+          medianRent,
         },
       },
     } = current;
@@ -220,6 +267,8 @@ const normalizeParameters = (dataByYear) => {
         ownershipRates: [ownershipRate],
         netMigrations: [netMigration],
         overCrowdingRates: [overCrowdingRate],
+        medianQueueTime: [medianQueueTime],
+        medianRent: [medianRent],
       };
 
     return {
@@ -227,6 +276,8 @@ const normalizeParameters = (dataByYear) => {
       ownershipRates: [...agg?.ownershipRates, ownershipRate],
       netMigrations: [...agg?.netMigrations, netMigration],
       overCrowdingRates: [...agg?.overCrowdingRates, overCrowdingRate],
+      medianQueueTime: [...agg?.medianQueueTime, medianQueueTime],
+      medianRent: [...agg?.medianRent, medianRent],
     };
   }, {});
 
@@ -238,6 +289,8 @@ const normalizeParameters = (dataByYear) => {
         ownershipRate,
         netMigration,
         overCrowdingRate,
+        medianQueueTime,
+        medianRent,
       },
     } = index;
 
@@ -256,6 +309,11 @@ const normalizeParameters = (dataByYear) => {
             overCrowdingRate,
             overCrowdingRateStat
           ),
+          medianQueueTime: calculateZScore(
+            medianQueueTime,
+            medianQueueTimeStat
+          ),
+          medianRent: calculateZScore(medianRent, medianRentStat),
         },
       },
     };
@@ -266,10 +324,10 @@ const applyWeights = (primaryArea) => {
   const {
     index: {
       normalized: {
-        netMigration,
         gothenburgMedianIncomeToMedianHousePrice,
         ownershipRate,
-        overCrowdingRate,
+        medianQueueTime,
+        medianRent,
       },
     },
   } = primaryArea;
@@ -279,12 +337,14 @@ const applyWeights = (primaryArea) => {
     index: {
       ...primaryArea.index,
       scaled: {
-        netMigration: netMigration * scales.netMigration,
+        // netMigration: netMigration * scales.netMigration,
         gothenburgMedianIncomeToMedianHousePrice:
           gothenburgMedianIncomeToMedianHousePrice *
           scales.gothenburgMedianIncomeToMedianHousePrice,
         ownershipRate: ownershipRate * scales.ownershipRate,
-        overCrowdingRate: overCrowdingRate * scales.overCrowdingRate,
+        // overCrowdingRate: overCrowdingRate * scales.overCrowdingRate,
+        medianQueueTime: medianQueueTime * scales.medianQueueTime,
+        medianRent: medianRent * scales.medianRent,
       },
     },
   };
