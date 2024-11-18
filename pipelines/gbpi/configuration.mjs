@@ -7,6 +7,7 @@ export const config = {
     mimhTitle: "MP/MI",
     indexTitle: "Göteborgs Boendeprisindex",
     indexShortTitle: "GBPI",
+    indexSubTitle: "En indikation på bostadstillgänglighet",
     ownershipRateTitle: "Bostadsägarandel %",
     medianQueueTimeTitle: "Mediankötid i år",
     medianRentTitle: "Median andrahandshyra/kvm",
@@ -16,8 +17,6 @@ export const config = {
     ownershipRate: 0.1,
     medianQueueTime: 0.3,
     medianRent: 0.3,
-    // netMigration: 0.15,
-    // overCrowdingRate: 0.15,
   },
 
   areaMapping: {
@@ -141,23 +140,23 @@ export const config = {
   },
   classification: {
     1: {
-      status: "Lätttillgängligt",
+      status: "Enkelt",
       color: "#66A182",
     },
     2: {
-      status: "Överkomligt",
+      status: "Möjligt",
       color: "#4B8F72",
     },
     3: {
-      status: "Neutralt",
+      status: "Utmanande",
       color: "#3B7D63",
     },
     4: {
-      status: "Svåröverkomligt",
+      status: "Svårt",
       color: "#2C6B54",
     },
     5: {
-      status: "Svårtillgängligt",
+      status: "Mycket svårt",
       color: "#1C4D3B",
     },
   },
