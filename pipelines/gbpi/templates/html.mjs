@@ -23,7 +23,7 @@ export const htmlTemplate = (
     <h1>${indexTitle} - ${indexSubTitle}</h1>
     
       <p>
-      Göteborgs Boendeprisindex är ett mått som ger en bild av hur lätt
+      Göteborgs Boendeprisindex är ett index som ger en bild av hur lätt
       eller svårt det är att hitta bostad i Göteborg.
      </p>
 
