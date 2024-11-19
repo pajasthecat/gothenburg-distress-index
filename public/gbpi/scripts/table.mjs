@@ -1,5 +1,8 @@
 let touchStartX = 0;
+let touchStartY = 0;
 let touchEndX = 0;
+let touchEndY = 0;
+let isSwiping = false;
 let currentPage = 0;
 
 const compareAsc = (first, second, comparer) => {
@@ -223,7 +226,7 @@ export const updatePagination = (newPage) => {
 const handleSwipe = () => {
   const swipeDistance = touchEndX - touchStartX;
 
-  if (Math.abs(swipeDistance) > 50) {
+  if (Math.abs(swipeDistance) > 30) {
     if (swipeDistance > 0) {
       const newPage = currentPage - 1;
       updatePagination(newPage);
@@ -242,14 +245,32 @@ export const setTouchEvent = () => {
 
   tableContainer.addEventListener("touchstart", (e) => {
     touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = false;
   });
 
   tableContainer.addEventListener("touchmove", (e) => {
     touchEndX = e.touches[0].clientX;
+    touchEndY = e.touches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    if (!isSwiping && Math.abs(deltaX) > Math.abs(deltaY)) {
+      isSwiping = true;
+    }
+
+    if (isSwiping) {
+      e.preventDefault();
+    }
   });
 
   tableContainer.addEventListener("touchend", () => {
-    handleSwipe();
+    if (isSwiping) {
+      handleSwipe();
+    }
+    touchStartX = touchEndX = touchStartY = touchEndY = 0;
+    isSwiping = false;
   });
 };
 
