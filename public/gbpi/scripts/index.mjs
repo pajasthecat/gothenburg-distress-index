@@ -7,10 +7,9 @@ import {
   setUpAllPrimaryAreas,
   setTablePaginationListener,
   updatePagination,
+  setTouchEvent,
 } from "./table.mjs";
 import { tooltip, initializeZoom } from "./map.mjs";
-
-let currentPage = 0;
 
 tooltip();
 
@@ -20,8 +19,10 @@ setUpAllPrimaryAreas(data);
 
 setSortingEventListeners();
 
-setSearchEventListeners(areas, data, currentPage);
+setSearchEventListeners(areas, data);
 
 setTablePaginationListener();
 
-updatePagination(currentPage);
+updatePagination(0);
+
+setTouchEvent();

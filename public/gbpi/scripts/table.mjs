@@ -1,3 +1,7 @@
+let touchStartX = 0;
+let touchEndX = 0;
+let currentPage = 0;
+
 const compareAsc = (first, second, comparer) => {
   switch (comparer) {
     case "number":
@@ -36,7 +40,7 @@ const setSortArrow = (table, index) => {
   });
 };
 
-const resetAllPrimaryAreas = (data, currentPage) => {
+const resetAllPrimaryAreas = (data) => {
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
 
   for (var i = 1; i < allPrimaryAreas.rows.length; ) {
@@ -50,7 +54,7 @@ const resetAllPrimaryAreas = (data, currentPage) => {
   updatePagination(currentPage);
 };
 
-const handleSearchPrimaryAreas = (e, areas, data, currentPage) => {
+const handleSearchPrimaryAreas = (e, areas, data) => {
   const searchText = e?.target?.value;
   if (!searchText) return setUpAllPrimaryAreas();
 
@@ -157,14 +161,14 @@ const getRow = ({
   medianRent,
 }) =>
   `
-  <tr style="background-color: ${color}; color: white">
+  <tr>
        <td class="sticky">${area}</td>
-       <td>${status}</td>
-       <td>${index}</td>
-       <td>${mimh}</td>
-       <td>${medianQueueTime}</td>
-       <td>${ownershipRate}</td>
-       <td>${medianRent}</td>
+       <td style="background-color: ${color}; color: white">${status}</td>
+       <td style="background-color: ${color}; color: white">${index}</td>
+       <td style="background-color: ${color}; color: white">${mimh}</td>
+       <td style="background-color: ${color}; color: white">${medianQueueTime}</td>
+       <td style="background-color: ${color}; color: white">${ownershipRate}</td>
+       <td style="background-color: ${color}; color: white">${medianRent}</td>
      </tr>
  `;
 
@@ -185,12 +189,16 @@ export const updatePagination = (newPage) => {
   const table = document.getElementById("allPrimaryAreas");
   const rows = table.querySelectorAll("tbody tr");
   const headerCells = table.querySelectorAll("thead th");
-  const totalColumns = headerCells.length - 1; // Exclude sticky column
+  const totalColumns = headerCells.length - 1;
   const columnsPerPage = 2;
 
   const paginationDots = getPaginationDot();
   const totalPages = Math.ceil(totalColumns / columnsPerPage);
-  const startColumn = newPage * columnsPerPage + 1; // Exclude sticky column
+
+  const pageToUpdateTo =
+    totalPages === newPage || newPage === -1 ? currentPage : newPage;
+
+  const startColumn = pageToUpdateTo * columnsPerPage + 1;
   const endColumn = startColumn + columnsPerPage;
 
   headerCells.forEach((cell, index) => {
@@ -207,14 +215,49 @@ export const updatePagination = (newPage) => {
     });
   });
 
-  createDots(paginationDots, newPage, totalPages);
+  createDots(paginationDots, pageToUpdateTo, totalPages);
+
+  currentPage = pageToUpdateTo;
 };
 
-export const setTablePaginationListener = (currentPage) =>
+const handleSwipe = () => {
+  const swipeDistance = touchEndX - touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) {
+    if (swipeDistance > 0) {
+      const newPage = currentPage - 1;
+      updatePagination(newPage);
+    } else {
+      const newPage = currentPage + 1;
+      updatePagination(newPage);
+    }
+  }
+
+  touchStartX = 0;
+  touchEndX = 0;
+};
+
+export const setTouchEvent = () => {
+  const tableContainer = document.querySelector(".tableContainer");
+
+  tableContainer.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+  });
+
+  tableContainer.addEventListener("touchmove", (e) => {
+    touchEndX = e.touches[0].clientX;
+  });
+
+  tableContainer.addEventListener("touchend", () => {
+    handleSwipe();
+  });
+};
+
+export const setTablePaginationListener = () =>
   getPaginationDot().addEventListener("click", (e) => {
     if (e.target.classList.contains("pagination-dot")) {
       const newPage = parseInt(e.target.dataset.page);
-      updatePagination(newPage, currentPage);
+      updatePagination(newPage);
     }
   });
 
@@ -248,13 +291,13 @@ export const setSortingEventListeners = () => {
     .addEventListener("click", () => sortTable(6, "number"));
 };
 
-export const setSearchEventListeners = (areas, data, currentPage) =>
+export const setSearchEventListeners = (areas, data) =>
   document
     .getElementById("searchText")
     .addEventListener("input", (e) =>
       e?.target?.value === ""
-        ? resetAllPrimaryAreas(data, currentPage)
-        : handleSearchPrimaryAreas(e, areas, data, currentPage)
+        ? resetAllPrimaryAreas(data)
+        : handleSearchPrimaryAreas(e, areas, data)
     );
 
 export const setUpAllPrimaryAreas = (data) => {
