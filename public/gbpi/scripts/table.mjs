@@ -152,14 +152,14 @@ const getRow = ({
   medianRent,
 }) =>
   `
-  <tr style="background: linear-gradient(to left, ${color} 50% 50%, white 50% 50%); color: white">
+  <tr style="background-color: ${color}; color: white">
        <td>${area}</td>
        <td>${status}</td>
        <td>${index}</td>
-       <td>${mimh}</td>
-       <td>${medianQueueTime}</td>
-       <td>${ownershipRate}</td>
-       <td>${medianRent}</td>
+       <td class="onlyOnDesktop">${mimh}</td>
+       <td class="onlyOnDesktop">${medianQueueTime}</td>
+       <td class="onlyOnDesktop">${ownershipRate}</td>
+       <td class="onlyOnDesktop">${medianRent}</td>
      </tr>
  `;
 

@@ -64,6 +64,10 @@ th {
   overflow: hidden;
 }
 
+.onlyOnDesktop{
+  visibility: visible; 
+}
+
 th {
   position: sticky;
   top: 0;
@@ -230,11 +234,13 @@ path {
   }
 
   td { 
-    border: 1px solid #dddddd;
-		border-bottom: 1px solid #eee; 
 		position: relative;
 		padding-left: 50%; 
 	}
+
+  .onlyOnDesktop{
+    display: none;
+  }
 	
 	td:before { 
     border: none;
@@ -244,10 +250,8 @@ path {
 		top: 6px;
 		left: 6px;
 		width: 50%; 
-    color: black;
 		padding-right: 10px; 
     border-collapse: collapse;
-    opacity: 0.7;
 	}
 
   td:nth-of-type(1):before { content: "Område"; }
