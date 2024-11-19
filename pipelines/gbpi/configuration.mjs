@@ -4,13 +4,13 @@ export const config = {
     fetch: false,
   },
   titles: {
-    mimhTitle: "MP/MI",
+    mimhTitle: "MPF/MI",
     indexTitle: "Göteborgs Boendeprisindex",
     indexShortTitle: "GBPI",
     indexSubTitle: "En indikation på bostadstillgänglighet",
-    ownershipRateTitle: "Bostadsägarandel %",
-    medianQueueTimeTitle: "Mediankötid i år",
-    medianRentTitle: "Median andrahandshyra/kvm",
+    ownershipRateTitle: "Ägarandel %",
+    medianQueueTimeTitle: "Mediankötid",
+    medianRentTitle: "Medianhyra/kvm (2hand)",
   },
   scales: {
     gothenburgMedianIncomeToMedianHousePrice: 0.3,
