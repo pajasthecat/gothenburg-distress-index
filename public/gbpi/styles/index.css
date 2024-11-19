@@ -58,6 +58,7 @@ table {
   text-align: left;
   margin: auto;
   width: 100%;
+  table-layout: fixed;
 }
 
 td,
@@ -69,6 +70,7 @@ th {
   font-size: small;
   text-align: center;
   overflow: hidden;
+  height: 30px;
 }
 
 th {
@@ -76,6 +78,34 @@ th {
   top: 0;
   background-color: white;
   cursor: pointer;
+  z-index: 3;
+}
+
+ td.sticky {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.pagination-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-dot.active {
+  background-color: #007bff;
 }
 
 .inputContainer {

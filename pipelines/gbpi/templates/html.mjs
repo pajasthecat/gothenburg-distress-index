@@ -89,8 +89,9 @@ export const htmlTemplate = (
 
     <div class="tableContainer">
       <table id="allPrimaryAreas">
+      <thead>
         <tr>
-          <th id="table-header-area" class="activeSort">Område</th>
+          <th id="table-header-area" class="activeSort sticky">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexShortTitle}</th>
           <th id="table-header-mimh">
@@ -103,8 +104,10 @@ export const htmlTemplate = (
           <th id="table-header-ownershipRate">${ownershipRateTitle} </th>
           <th id="table-header-medianRent">${medianRentTitle} </th>
         </tr>
+      </thead>
       </table>
     </div>
+    <div class="pagination" id="pagination-dots"></div>
 
     <footer>
       <div class="footerContainer">

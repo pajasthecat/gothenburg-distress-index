@@ -36,7 +36,7 @@ const setSortArrow = (table, index) => {
   });
 };
 
-const resetAllPrimaryAreas = (data) => {
+const resetAllPrimaryAreas = (data, currentPage) => {
   const allPrimaryAreas = document.getElementById("allPrimaryAreas");
 
   for (var i = 1; i < allPrimaryAreas.rows.length; ) {
@@ -46,9 +46,12 @@ const resetAllPrimaryAreas = (data) => {
   addRow(data, allPrimaryAreas);
 
   setSortingEventListeners();
+
+  updatePagination(currentPage);
 };
 
-const handleSearchPrimaryAreas = (searchText, areas, data) => {
+const handleSearchPrimaryAreas = (e, areas, data, currentPage) => {
+  const searchText = e?.target?.value;
   if (!searchText) return setUpAllPrimaryAreas();
 
   if (searchText.length <= 3) return;
@@ -78,6 +81,8 @@ const handleSearchPrimaryAreas = (searchText, areas, data) => {
   addRow(selectedData, allPrimaryAreas);
 
   setSortingEventListeners();
+
+  updatePagination(currentPage);
 };
 
 const sortTable = (index, comparer) => {
@@ -153,7 +158,7 @@ const getRow = ({
 }) =>
   `
   <tr style="background-color: ${color}; color: white">
-       <td>${area}</td>
+       <td class="sticky">${area}</td>
        <td>${status}</td>
        <td>${index}</td>
        <td>${mimh}</td>
@@ -162,6 +167,56 @@ const getRow = ({
        <td>${medianRent}</td>
      </tr>
  `;
+
+const getPaginationDot = () => document.getElementById("pagination-dots");
+
+const createDots = (paginationDots, newPage, totalPages) => {
+  paginationDots.innerHTML = "";
+  for (let i = 0; i < totalPages; i++) {
+    const dot = document.createElement("div");
+    dot.classList.add("pagination-dot");
+    if (i === newPage) dot.classList.add("active");
+    dot.dataset.page = i;
+    paginationDots.appendChild(dot);
+  }
+};
+
+export const updatePagination = (newPage) => {
+  const table = document.getElementById("allPrimaryAreas");
+  const rows = table.querySelectorAll("tbody tr");
+  const headerCells = table.querySelectorAll("thead th");
+  const totalColumns = headerCells.length - 1; // Exclude sticky column
+  const columnsPerPage = 2;
+
+  const paginationDots = getPaginationDot();
+  const totalPages = Math.ceil(totalColumns / columnsPerPage);
+  const startColumn = newPage * columnsPerPage + 1; // Exclude sticky column
+  const endColumn = startColumn + columnsPerPage;
+
+  headerCells.forEach((cell, index) => {
+    cell.style.display =
+      index === 0 || (index >= startColumn && index < endColumn) ? "" : "none";
+  });
+
+  rows.forEach((row) => {
+    Array.from(row.cells).forEach((cell, index) => {
+      cell.style.display =
+        index === 0 || (index >= startColumn && index < endColumn)
+          ? ""
+          : "none";
+    });
+  });
+
+  createDots(paginationDots, newPage, totalPages);
+};
+
+export const setTablePaginationListener = (currentPage) =>
+  getPaginationDot().addEventListener("click", (e) => {
+    if (e.target.classList.contains("pagination-dot")) {
+      const newPage = parseInt(e.target.dataset.page);
+      updatePagination(newPage, currentPage);
+    }
+  });
 
 export const setSortingEventListeners = () => {
   document
@@ -193,13 +248,13 @@ export const setSortingEventListeners = () => {
     .addEventListener("click", () => sortTable(6, "number"));
 };
 
-export const setSearchEventListeners = (areas, data) =>
+export const setSearchEventListeners = (areas, data, currentPage) =>
   document
     .getElementById("searchText")
     .addEventListener("input", (e) =>
       e?.target?.value === ""
-        ? resetAllPrimaryAreas(data)
-        : handleSearchPrimaryAreas(e?.target?.value, areas, data)
+        ? resetAllPrimaryAreas(data, currentPage)
+        : handleSearchPrimaryAreas(e, areas, data, currentPage)
     );
 
 export const setUpAllPrimaryAreas = (data) => {
