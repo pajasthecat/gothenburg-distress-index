@@ -92,12 +92,7 @@ export const htmlTemplate = (
           <th id="table-header-area" class="activeSort sticky">Område</th>
           <th id="table-header-status">Status</th>
           <th id="table-header-index">${indexShortTitle}</th>
-          <th id="table-header-mimh">
-          <div class="tableTooltip">
-            ${mimhTitle}
-              <span>Kvot mellan medianfastighetspris (MP) och medianinkomst (MI)</span>
-            </div>  
-          </th>
+          <th id="table-header-mimh">${mimhTitle}</th>
           <th id="table-header-medianQueueTime">${medianQueueTimeTitle} </th>
           <th id="table-header-ownershipRate">${ownershipRateTitle} </th>
           <th id="table-header-medianRent">${medianRentTitle} </th>

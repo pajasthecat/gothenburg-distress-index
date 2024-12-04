@@ -219,31 +219,6 @@ path {
   transition: background-color 0.3s ease;
 }
 
-.tableTooltip{
-  border-bottom: 1px dotted black;
-}
-
-.tableTooltip span {
-  display: none;
-  visibility: hidden; 
-  opacity: 0; 
-  font-size: smaller;
-}
-
-.tableTooltip:hover {
-  border-bottom: none;
-  visibility: hidden;
-}
-
-.tableTooltip:hover span {
-  display: inline-block;
-  border-bottom: none;
-  visibility: visible; 
-  opacity: 1; 
-  text-align: left;
-}
-
-
 @media screen and (max-width: 800px) {
   body {
     width: 90%;

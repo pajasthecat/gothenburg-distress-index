@@ -75,11 +75,9 @@ const calculateIndex = (dataByArea) => {
     },
   } = index;
 
-  const ownershipRateInverted = 1 - ownershipRate;
-
   const result =
     gothenburgMedianIncomeToMedianHousePrice +
-    ownershipRateInverted +
+    ownershipRate +
     medianQueueTime +
     medianRent;
 
@@ -201,14 +199,17 @@ const getMedianIncomeToMedianHousePrice = (
 };
 
 const calculateOwnershipRate = (dataByArea) => {
-  const { propertyOwnershipRate, area } = dataByArea;
+  const { propertyOwnershipRate } = dataByArea;
 
-  return (
+  const ownershipRate =
     propertyOwnershipRate.own /
     (propertyOwnershipRate.rent +
       propertyOwnershipRate.own +
-      propertyOwnershipRate.other)
-  );
+      propertyOwnershipRate.other);
+
+  const ownershipRatesInverted = 1 - ownershipRate;
+
+  return ownershipRatesInverted;
 };
 
 const calculateNetMigration = (dataByArea) => {

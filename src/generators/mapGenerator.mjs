@@ -51,9 +51,9 @@ const drawMap = (mapEntries, labels) => {
 const createTitle = (svg, year, mapTitle) => {
   svg
     .append("rect")
-    .attr("x", 50)
-    .attr("y", 12)
-    .attr("width", 140)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 150)
     .attr("height", 45)
     .style("fill", "white")
     .style("opacity", 0.9)
@@ -63,14 +63,14 @@ const createTitle = (svg, year, mapTitle) => {
   svg
     .append("text")
     .attr("class", "mapTitle")
-    .attr("x", 55)
-    .attr("y", 30)
+    .attr("x", 10)
+    .attr("y", 15)
     .text("Göteborgs");
   svg
     .append("text")
     .attr("class", "mapTitle")
-    .attr("x", 55)
-    .attr("y", 50)
+    .attr("x", 10)
+    .attr("y", 35)
     .text(`${mapTitle} ${year}`);
 };
 

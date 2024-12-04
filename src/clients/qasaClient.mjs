@@ -1,23 +1,4 @@
-import { load } from "cheerio";
-
-import { configuration } from "./configuration.js";
-import { readCache } from "./cache/cache.mjs";
-
 export const getMedianRent = async () => {
-  console.log("Getting data from Qasa");
-
-  const {
-    boplats: { tables },
-  } = configuration;
-
-  const cacheName = "qasaClient.json";
-
-  const cachedProps = readCache(cacheName);
-
-  if (cachedProps) return cachedProps;
-
-  console.log("Done getting data from Qasa");
-
   return {
     Angered: [
       { room: 1, rentPerSqm: 237 },
