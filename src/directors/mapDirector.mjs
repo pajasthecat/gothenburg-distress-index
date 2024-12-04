@@ -5,6 +5,12 @@ import { JSDOM } from "jsdom";
 
 import { addGbDataToGeoData } from "../mappers/geoDataEnricher.mjs";
 
+export const buildMap = (indexData, mapOptions) => {
+  const geoData = JSON.parse(readFileSync("data/data.geojson"));
+  const mapData = addGbDataToGeoData(indexData, geoData);
+  return drawMap(mapData, mapOptions);
+};
+
 const drawMap = (mapEntries, labels) => {
   const { year, mapTitle, indexShortTitle } = labels;
   const domObj = new JSDOM(`<!DOCTYPE html><body><div id="svg"></div></body>`);
@@ -131,10 +137,4 @@ const getColors = (data) => {
       return acc;
     }, [])
     .sort((a, b) => a.sorting - b.sorting);
-};
-
-export const createPrimaryAreaMap = (indexData, options) => {
-  const geoData = JSON.parse(readFileSync("data/data.geojson"));
-  const mapData = addGbDataToGeoData(indexData, geoData);
-  return drawMap(mapData, options);
 };

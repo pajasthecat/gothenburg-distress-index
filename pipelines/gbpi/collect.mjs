@@ -3,7 +3,7 @@ import {  getMedianIncomes, getPropertyOwnershipRate, getMovingData, getPopulati
 
 import { toPriceByYear } from "../../src/mappers/booliMappers.mjs";
 import { readCache, writeCache } from "../../src/clients/cache/cache.mjs";
-import {  normalizeString } from "../../src/normalizers.mjs";
+import {  normalizeString } from "../../src/services/normalizerService.mjs";
 import { getQueueTimeForPrimaryAreas, getMedianRentForPrimaryAreas } from "../../src/services/rentalInformationService.mjs";
 
 import { config } from "./configuration.mjs";

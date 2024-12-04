@@ -1,4 +1,4 @@
-import { normalizeString } from "../normalizers.mjs";
+import { normalizeString } from "../services/normalizerService.mjs";
 
 export const toPriceByYear = (booliData, primaryAreas) =>
   Object.keys(booliData).reduce((agg, year) => {
