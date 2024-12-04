@@ -3,6 +3,7 @@ export const config = {
   propertyPrices: {
     fetch: false,
   },
+  mapTitle: "Primärområden",
   titles: {
     mimhTitle: "MPF/MI",
     indexTitle: "Göteborgs Boendeprisindex",
